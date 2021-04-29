@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PatcherTest {
-    
+
 
     @Test
     void patchInsert() {

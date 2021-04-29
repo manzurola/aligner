@@ -72,7 +72,9 @@ public final class Alignment<T> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Alignment<?> alignment = (Alignment<?>) o;
-        return Double.compare(alignment.cost, cost) == 0 && Double.compare(alignment.distance, distance) == 0 && edits.equals(alignment.edits);
+        return Double.compare(alignment.cost, cost) == 0 &&
+                Double.compare(alignment.distance, distance) == 0 &&
+                edits.equals(alignment.edits);
     }
 
     @Override

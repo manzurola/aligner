@@ -59,7 +59,7 @@ public final class Edit<T> extends AbstractEdit<T, T> {
     }
 
     public final <E> Edit<E> mapSegments(Function<Segment<T>, Segment<E>> sourceMapper,
-                                   Function<Segment<T>, Segment<E>> targetMapper) {
+                                         Function<Segment<T>, Segment<E>> targetMapper) {
         return of(
                 operation(),
                 sourceMapper.apply(source()),

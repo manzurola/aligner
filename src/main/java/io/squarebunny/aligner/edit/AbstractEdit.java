@@ -11,8 +11,8 @@ public abstract class AbstractEdit<S, T> implements Comparable<AbstractEdit<S, T
     private final Segment<T> target;
 
     protected AbstractEdit(Operation operation,
-                Segment<S> source,
-                Segment<T> target) {
+                           Segment<S> source,
+                           Segment<T> target) {
         this.operation = Objects.requireNonNull(operation);
         this.source = Objects.requireNonNull(source);
         this.target = Objects.requireNonNull(target);

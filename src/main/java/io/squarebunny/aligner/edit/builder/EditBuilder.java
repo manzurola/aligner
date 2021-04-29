@@ -129,8 +129,8 @@ public final class EditBuilder {
         private final List<T> target;
 
         AtPosition(Operation operation,
-                          List<T> source,
-                          List<T> target) {
+                   List<T> source,
+                   List<T> target) {
             this.operation = operation;
             this.source = source;
             this.target = target;

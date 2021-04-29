@@ -30,6 +30,7 @@ public final class Patch<T> implements Patcher<T> {
 
     /**
      * Apply this patch to the given target
+     *
      * @return the patched text
      * @throws IllegalStateException if can't apply patch
      */
@@ -45,6 +46,7 @@ public final class Patch<T> implements Patcher<T> {
 
     /**
      * Restore the text to original. Opposite to applyTo() method.
+     *
      * @param target the given target
      * @return the restored text
      */
@@ -52,7 +54,7 @@ public final class Patch<T> implements Patcher<T> {
         List<T> result = new LinkedList<>(target);
         ListIterator<Edit<T>> it = getEdits().listIterator(edits.size());
         while (it.hasPrevious()) {
-            Edit<T> edit =  it.previous();
+            Edit<T> edit = it.previous();
             result = EditPatcher.forEdit(edit).undoFrom(result);
         }
         return result;
@@ -60,6 +62,7 @@ public final class Patch<T> implements Patcher<T> {
 
     /**
      * Get the list of computed deltas
+     *
      * @return the deltas
      */
     public List<Edit<T>> getEdits() {

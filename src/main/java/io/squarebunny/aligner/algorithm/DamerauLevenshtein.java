@@ -7,7 +7,10 @@ import io.squarebunny.aligner.edit.Edit;
 import io.squarebunny.aligner.edit.Operation;
 import io.squarebunny.aligner.edit.Segment;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.BiPredicate;
 
 import static io.squarebunny.aligner.edit.Operation.*;
