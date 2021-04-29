@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 import static io.squarebunny.aligner.edit.Operation.SUBSTITUTE;
 import static io.squarebunny.aligner.edit.Operation.TRANSPOSE;
 
-public class Edit<T> extends AbstractEdit<T, T> {
+public final class Edit<T> extends AbstractEdit<T, T> {
 
     protected Edit(Operation operation,
                    Segment<T> source,
