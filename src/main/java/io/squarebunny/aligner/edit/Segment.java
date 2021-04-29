@@ -145,7 +145,6 @@ public final class Segment<T> implements Serializable, Comparable<Segment<T>> {
                 '}';
     }
 
-
     @Override
     public int compareTo(Segment<T> o) {
         return Integer.compare(position, o.position);
