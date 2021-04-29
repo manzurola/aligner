@@ -29,7 +29,7 @@ We can supply a custom equality function as such (though in this example both us
   Aligner<String> aligner = Aligner.levenshtein((s, t) -> s.equals(t);
 ```
 
-Let's take it a step further and configure our own cost function. We will use the AlignerBuilder for this, and reaplce the substituteCost with a char edit ratio, a static utility method supplied via the AlignerUtils class.
+Let's take it a step further and configure our own cost function. We will use the AlignerBuilder for this, and replace the substituteCost with a char edit ratio, a static utility method supplied via the AlignerUtils class.
 
 ```
   Aligner<String> aligner = Aligner.<String>builder()
