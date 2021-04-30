@@ -1,6 +1,8 @@
 # Aligner
 
-This is an implementation of a configurable [Damerau Levenshtein](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) aligner, inspired by [Errant by Chris Bryant](https://github.com/chrisjbryant/errant/blob/master/errant/alignment.py) and [diff_match_patch by Neil Fraser](https://github.com/google/diff-match-patch).
+This is a Java implementation of a configurable [Damerau Levenshtein](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) aligner, inspired by [Errant by Chris Bryant](https://github.com/chrisjbryant/errant/blob/master/errant/alignment.py) and [diff_match_patch by Neil Fraser](https://github.com/google/diff-match-patch).
+
+AFAIK this is the only implementation of an aligner in Java that supports custom operation costs and equality/transposition operators.
 
 I suggest catching up on Edit Distance in general if the reader requires some background before we dive into some examples.
 Here are some recommended resources:
