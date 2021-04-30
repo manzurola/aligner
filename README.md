@@ -1,6 +1,7 @@
 # Aligner
 
-This is an implementation of a configurable [Damerau Levenshtein](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) aligner. Heavily inspired and at points ported exactly from [Errant by Chris Bryant](https://github.com/chrisjbryant/errant/blob/master/errant/alignment.py).
+This is an implementation of a configurable [Damerau Levenshtein](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) aligner.
+Heavily inspired and at points shamelessly ported from [Errant by Chris Bryant](https://github.com/chrisjbryant/errant/blob/master/errant/alignment.py).
 
 I suggest catching up on Edit Distance in general if the reader requires some background before we dive into some examples.
 Here are some recommended resources:
