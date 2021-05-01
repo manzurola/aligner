@@ -1,4 +1,4 @@
-package io.squarebunny.aligner.algorithm;
+package io.squarebunny.aligner.impl;
 
 
 import io.squarebunny.aligner.Aligner;
@@ -15,7 +15,13 @@ import java.util.function.BiPredicate;
 
 import static io.squarebunny.aligner.edit.Operation.*;
 
-
+/**
+ * This implementation is a port of <a href="https://github.com/chrisjbryant/errant/blob/master/errant/alignment.py">
+ *     https://github.com/chrisjbryant/errant/blob/master/errant/alignment.py</a>.
+ *
+ *
+ * @param <T>
+ */
 public class DamerauLevenshtein<T> implements Aligner<T> {
 
     private final CostFunction<T> costFunction;

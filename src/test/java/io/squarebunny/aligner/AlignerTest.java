@@ -1,6 +1,7 @@
 package io.squarebunny.aligner;
 
 import io.squarebunny.aligner.edit.Edit;
+import io.squarebunny.aligner.utils.AlignerUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -15,6 +16,28 @@ public class AlignerTest {
 
         List<String> source = List.of("the", "guy", "am");
         List<String> target = List.of("am", "guy", "the");
+
+        List<Edit<String>> expected = List.of(
+                Edit.builder().substitute("the").with("am").atPosition(0, 0),
+                Edit.builder().equal("guy").and("guy").atPosition(1, 1),
+                Edit.builder().substitute("am").with("the").atPosition(2, 2)
+        );
+
+        Alignment<String> actual = aligner.align(source, target);
+
+        assertEquals(expected, actual.edits());
+        assertEquals(2.0, actual.cost());
+        assertEquals(2.0 / 3.0, actual.distance());
+    }
+
+    @Test
+    void customCostFunction() {
+        Aligner<String> aligner = Aligner.<String>builder()
+                .setSubstituteCost(AlignerUtils::charEditRatio)
+                .build();
+
+        List<String> source = List.of("one", "three", "three");
+        List<String> target = List.of("one", "two", "three");
 
         List<Edit<String>> expected = List.of(
                 Edit.builder().substitute("the").with("am").atPosition(0, 0),

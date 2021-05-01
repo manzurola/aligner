@@ -139,10 +139,7 @@ public final class Segment<T> implements Serializable, Comparable<Segment<T>> {
 
     @Override
     public final String toString() {
-        return "{" +
-                "position=" + position +
-                ", words=" + tokens +
-                '}';
+        return tokens.toString();
     }
 
     @Override

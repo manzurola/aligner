@@ -5,6 +5,7 @@ import io.squarebunny.aligner.edit.Segment;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,6 +33,10 @@ public final class Alignment<T> {
         return edits().stream();
     }
 
+    public final void forEach(Consumer<Edit<T>> consumer) {
+        edits.forEach(consumer);
+    }
+
     public final double cost() {
         return cost;
     }
@@ -42,6 +47,11 @@ public final class Alignment<T> {
 
     public final double similarity() {
         return 1 - distance;
+    }
+
+    public final double ratio() {
+        int lensum = Math.max(source().size(), target().size());
+        return (lensum - cost()) / lensum;
     }
 
     public final List<T> source() {
@@ -56,11 +66,6 @@ public final class Alignment<T> {
                 .map(Edit::target)
                 .flatMap(Segment::stream)
                 .collect(Collectors.toList());
-    }
-
-    public final double ratio() {
-        int lensum = Math.max(source().size(), target().size());
-        return (lensum - cost()) / lensum;
     }
 
     public final int size() {

@@ -1,4 +1,4 @@
-package io.squarebunny.aligner.algorithm;
+package io.squarebunny.aligner.impl;
 
 import java.util.List;
 

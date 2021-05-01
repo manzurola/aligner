@@ -1,7 +1,7 @@
 package io.squarebunny.aligner;
 
-import io.squarebunny.aligner.algorithm.CostFunction;
-import io.squarebunny.aligner.algorithm.DamerauLevenshtein;
+import io.squarebunny.aligner.impl.CostFunction;
+import io.squarebunny.aligner.impl.DamerauLevenshtein;
 
 import java.util.List;
 import java.util.function.BiFunction;

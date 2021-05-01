@@ -11,6 +11,10 @@ public interface Aligner<T> {
         return new AlignerBuilder<>();
     }
 
+    static <T> AlignerBuilder<T> builder(Class<T> type) {
+        return new AlignerBuilder<>();
+    }
+
     static <T> Aligner<T> levenshtein(BiPredicate<T, T> isEqual) {
         return new AlignerBuilder<T>()
                 .setIsEqual(isEqual)
