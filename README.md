@@ -17,7 +17,7 @@ Here are some recommended resources:
 In this example String::equals is used as the equality function, i.e. what determines whether two elemnts are equal.
 
 ```
-  List<String> source = List.of("one", "three", "two");
+  List<String> source = List.of("one", "three", "three");
   List<String> target = List.of("one", "two", "three");
         
   Aligner<String> aligner = Aligner.levenshtein();
