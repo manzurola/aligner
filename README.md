@@ -4,7 +4,7 @@ This is a Java implementation of a configurable [Damerau Levenshtein](https://en
 
 AFAIK this is the only implementation of an aligner in Java that supports custom operation costs and equality/transposition operators.
 
-I suggest catching up on Edit Distance in general if the reader requires some background before we dive into some examples.
+You may catch up on Edit Distance in general before we dive into some examples.
 Here are some recommended resources:
 1. [Speech and Language Processing](https://web.stanford.edu/~jurafsky/slp3/2.pdf)
 2. [Stanford](https://web.stanford.edu/class/cs124/lec/med.pdf)
