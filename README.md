@@ -25,7 +25,6 @@ Here are some recommended resources to catch up on Edit Distance in general:
 ```java
 // The source and target lists to be aligned.
 // An alignment will contain edits that describe how to transform source into target.
-
 List<Integer> source = List.of(1, 3, 3);
 List<Integer> target = List.of(1, 2, 3);
 
