@@ -15,7 +15,8 @@ Here are some recommended resources to catch up on Edit Distance in general:
 4. Custom Comparator to determine transposition
 5. Edit Ratio, Distance and Cost given on an Alignment result
 6. Powerfull Edit class supports merge operations and functional stream like operations
-7. And more...
+7. Patch class to patch a list of edits into a target list (beta, see tests)
+8. And more...
 
 ## Quick Start / Configurable Damerau Levenshtein
 
