@@ -2,18 +2,17 @@
 
 This is a Java implementation of a configurable [Damerau Levenshtein](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) aligner, inspired by [Errant by Chris Bryant](https://github.com/chrisjbryant/errant/blob/master/errant/alignment.py) and [diff_match_patch by Neil Fraser](https://github.com/google/diff-match-patch).
 
-You may catch up on Edit Distance in general before we dive into some examples.
-Here are some recommended resources:
+Here are some recommended resources to catch up on Edit Distance in general:
 1. [Speech and Language Processing](https://web.stanford.edu/~jurafsky/slp3/2.pdf)
 2. [Stanford](https://web.stanford.edu/class/cs124/lec/med.pdf)
 3. [Wikipedia](https://en.wikipedia.org/wiki/Edit_distance)
 
 ## Features
 
-1. Supports 5 Edit operations - Insert, Delete, Substitute, Transpose and Equal.
-2. Custom Equality function
-3. Custom Comparator to determine transposition
-4. Variable length transposition edit
+1. Supports 5 Edit operations - Insert, Delete, Substitute, Transpose and Equal
+2. Variable length transposition edit
+3. Custom Equality function
+4. Custom Comparator to determine transposition
 5. Edit Ratio, Distance and Cost given on an Alignment result
 6. Powerfull Edit class supports merge operations and functional stream like operations
 7. And more...
