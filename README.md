@@ -2,39 +2,58 @@
 
 This is a Java implementation of a configurable [Damerau Levenshtein](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) aligner, inspired by [Errant by Chris Bryant](https://github.com/chrisjbryant/errant/blob/master/errant/alignment.py) and [diff_match_patch by Neil Fraser](https://github.com/google/diff-match-patch).
 
-AFAIK this is the only implementation of an aligner in Java that supports custom operation costs and equality/transposition operators.
-
 You may catch up on Edit Distance in general before we dive into some examples.
 Here are some recommended resources:
 1. [Speech and Language Processing](https://web.stanford.edu/~jurafsky/slp3/2.pdf)
 2. [Stanford](https://web.stanford.edu/class/cs124/lec/med.pdf)
 3. [Wikipedia](https://en.wikipedia.org/wiki/Edit_distance)
 
-## Use Cases
+## Features
 
-### Levenshtein
+1. Supports 5 Edit operations - Insert, Delete, Substitute, Transpose and Equal.
+2. Custom Equality function
+3. Custom Comparator to determine transposition
+4. Variable length transposition edit
+5. Edit Ratio, Distance and Cost given on an Alignment result
+6. Powerfull Edit class supports merge operations and functional stream like operations
+7. And more...
 
-In this example String::equals is used as the equality function, i.e. what determines whether two elemnts are equal.
+## Quick Start / Configurable Damerau Levenshtein
 
 ```
-  List<String> source = List.of("one", "three", "three");
-  List<String> target = List.of("one", "two", "three");
-        
-  Aligner<String> aligner = Aligner.levenshtein();
+  // The source and target lists to be aligned.
+  // An alignment will contain edits that describe how to transform source into target.
   
-  Alignment<String> actual = aligner.align(source, target);
+  List<Integer> source = List.of(1, 3, 3);
+  List<Integer> target = List.of(1, 2, 3);
+
+  // The equality operation is used to determine whether two elements are equal
+  BiPredicate<Integer, Integer> equalizer = Integer::equals;
+  
+  // The comparator is used to sort and compare two candidate lists for transposition
+  Comparator<Integer> comparator = Integer::compareTo;
+  
+  // The cost function disables substitution for elements with values (3,2) by returning a Double.MAX_VALUE when matched
+  BiFunction<Integer, Integer, Double> substituteCost = (s, t) -> s == 3 && t == 2 ? Double.MAX_VALUE : 1.0;
+
+  // A custom damerau levenshtein aligner
+  Aligner<Integer> aligner = Aligner.damerauLevenshtein(equalizer, comparator, substituteCost);
+
+  // The expected list of edits
+  List<Edit<Integer>> expected = List.of(
+          Edit.builder().equal(1).and(1).atPosition(0, 0),
+          Edit.builder().delete(3).atPosition(1, 1),
+          Edit.builder().insert(2).atPosition(2, 1),
+          Edit.builder().equal(3).and(3).atPosition(2, 2)
+  );
+
+  // Align the two lists
+  Alignment<Integer> actual = aligner.align(source, target);
+
+  // Assert expected results
+  assertEquals(expected, actual.edits());
+  assertEquals(2.0, actual.cost());
+  assertEquals(2.0 / 3.0, actual.distance());
 ```
 
-We can supply a custom equality function as such (though in this example both use String::equals).
-
-```
-  Aligner<String> aligner = Aligner.levenshtein((s, t) -> s.equals(t);
-```
-
-Let's take it a step further and configure our own cost function. We will use the AlignerBuilder for this, and replace the substituteCost with a char edit ratio, a static utility method supplied via the AlignerUtils class.
-
-```
-  Aligner<String> aligner = Aligner.<String>builder()
-          .setSubstituteCost(AlignerUtils::charEditRatio)
-          .build();
-```
+Check out the tests for more example uses. Ping me for comments.
