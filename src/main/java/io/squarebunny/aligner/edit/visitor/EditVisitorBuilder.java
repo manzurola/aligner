@@ -12,7 +12,6 @@ public class EditVisitorBuilder<E extends AbstractEdit<?, ?>, R> {
     private Function<E, R> onSubstitute = (e) -> null;
     private Function<E, R> onTranspose = (e) -> null;
 
-
     public EditVisitorBuilder<E, R> onEqual(Function<E, R> visitor) {
         this.onEqual = visitor;
         return this;

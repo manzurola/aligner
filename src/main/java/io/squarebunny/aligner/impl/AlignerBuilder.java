@@ -1,66 +1,55 @@
-package io.squarebunny.aligner;
+package io.squarebunny.aligner.impl;
 
-import io.squarebunny.aligner.impl.CostFunction;
-import io.squarebunny.aligner.impl.DamerauLevenshtein;
+import io.squarebunny.aligner.Aligner;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public final class AlignerBuilder<T> {
+
+    private BiPredicate<T, T> equalizer = T::equals;
+    private Comparator<T> comparator = null;
 
     private Function<T, Double> deleteCost = (s) -> 1.0;
     private Function<T, Double> insertCost = (t) -> 1.0;
     private BiFunction<T, T, Double> substituteCost = (s, t) -> 1.0;
     private BiFunction<List<T>, List<T>, Double> transposeCost = (s, t) -> s.size() - 1.0;
-    private BiPredicate<T, T> isEqual = T::equals;
-    private BiPredicate<List<T>, List<T>> isTransposed = (s, t) -> {
-        List<T> sList = s.stream()
-                .sorted()
-                .collect(Collectors.toList());
-        List<T> tList = t.stream()
-                .sorted()
-                .collect(Collectors.toList());
-        return sList.equals(tList);
-    };
 
-    AlignerBuilder() {
-    }
-
-    public AlignerBuilder<T> setDeleteCost(Function<T, Double> deleteCost) {
+    public final AlignerBuilder<T> setDeleteCost(Function<T, Double> deleteCost) {
         this.deleteCost = deleteCost;
         return this;
     }
 
-    public AlignerBuilder<T> setInsertCost(Function<T, Double> insertCost) {
+    public final AlignerBuilder<T> setInsertCost(Function<T, Double> insertCost) {
         this.insertCost = insertCost;
         return this;
     }
 
-    public AlignerBuilder<T> setSubstituteCost(BiFunction<T, T, Double> substituteCost) {
+    public final AlignerBuilder<T> setSubstituteCost(BiFunction<T, T, Double> substituteCost) {
         this.substituteCost = substituteCost;
         return this;
     }
 
-    public AlignerBuilder<T> setTransposeCost(BiFunction<List<T>, List<T>, Double> transposeCost) {
+    public final AlignerBuilder<T> setTransposeCost(BiFunction<List<T>, List<T>, Double> transposeCost) {
         this.transposeCost = transposeCost;
         return this;
     }
 
-    public AlignerBuilder<T> setIsEqual(BiPredicate<T, T> isEqual) {
-        this.isEqual = isEqual;
+    public AlignerBuilder<T> setEqualizer(BiPredicate<T, T> equalizer) {
+        this.equalizer = equalizer;
         return this;
     }
 
-    public AlignerBuilder<T> setIsTransposed(BiPredicate<List<T>, List<T>> isTransposed) {
-        this.isTransposed = isTransposed;
+    public final AlignerBuilder<T> setComparator(Comparator<T> comparator) {
+        this.comparator = comparator;
         return this;
     }
 
-    public Aligner<T> build() {
-        return new DamerauLevenshtein<>(new CostFunction<T>() {
+    public final Aligner<T> build() {
+        return new DamerauLevenshtein<>(new CostFunction<>() {
             @Override
             public double deleteCost(T source) {
                 return deleteCost.apply(source);
@@ -80,6 +69,6 @@ public final class AlignerBuilder<T> {
             public double transposeCost(List<T> source, List<T> target) {
                 return transposeCost.apply(source, target);
             }
-        }, isEqual, isTransposed);
+        }, equalizer, comparator);
     }
 }

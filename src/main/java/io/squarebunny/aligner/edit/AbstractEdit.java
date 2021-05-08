@@ -55,6 +55,7 @@ public abstract class AbstractEdit<S, T> implements Comparable<AbstractEdit<S, T
         return "Edit[" + operation +
                 ", source=" + source +
                 ", target=" + target +
+                ", position= [" + source().position() + ", " + target.position() + "]" +
                 ']';
     }
 }

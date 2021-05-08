@@ -3,7 +3,7 @@ package io.squarebunny.aligner.edit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class EditTests {
+public class EditTest {
 
     @Test
     void mergeAdjacent() {
@@ -24,5 +24,4 @@ public class EditTests {
         Assertions.assertEquals(expected, left.mergeWith(right));
         Assertions.assertEquals(expected, right.mergeWith(left));
     }
-
 }

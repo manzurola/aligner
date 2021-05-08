@@ -1,6 +1,5 @@
 package io.squarebunny.aligner.edit.predicates;
 
-import io.squarebunny.aligner.edit.AbstractEdit;
 import io.squarebunny.aligner.edit.Edit;
 import io.squarebunny.aligner.edit.Operation;
 
@@ -9,23 +8,23 @@ import java.util.function.Predicate;
 
 public class EditPredicates {
 
-    public static Predicate<? super Edit<?>> isSubstitute() {
+    public static Predicate<Edit<?>> isSubstitute() {
         return edit -> edit.operation().equals(Operation.SUBSTITUTE);
     }
 
-    public static <T extends AbstractEdit<?, ?>> Predicate<T> isInsert() {
+    public static Predicate<Edit<?>> isInsert() {
         return edit -> edit.operation().equals(Operation.INSERT);
     }
 
-    public static <T extends AbstractEdit<?, ?>> Predicate<T> isDelete() {
+    public static Predicate<Edit<?>> isDelete() {
         return edit -> edit.operation().equals(Operation.DELETE);
     }
 
-    public static <T extends AbstractEdit<?, ?>> Predicate<T> isTranspose() {
+    public static Predicate<Edit<?>> isTranspose() {
         return edit -> edit.operation().equals(Operation.TRANSPOSE);
     }
 
-    public static <T extends AbstractEdit<?, ?>> Predicate<T> isEqual() {
+    public static Predicate<Edit<?>> isEqual() {
         return edit -> edit.operation().equals(Operation.EQUAL);
     }
 
@@ -33,7 +32,7 @@ public class EditPredicates {
         return edit -> edit.source().size() == sourceSize && edit.target().size() == targetSize;
     }
 
-    public static Predicate<? super Edit<?>> ofMaxSize(int maxSourceSize, int maxTargetSize) {
+    public static Predicate<Edit<?>> ofMaxSize(int maxSourceSize, int maxTargetSize) {
         return edit -> edit.source().size() <= maxSourceSize && edit.target().size() <= maxTargetSize;
     }
 

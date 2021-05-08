@@ -9,7 +9,6 @@ import java.util.List;
 
 public class PatcherTest {
 
-
     @Test
     void patchInsert() {
         List<String> target = Arrays.asList("hello", "hi", "there");

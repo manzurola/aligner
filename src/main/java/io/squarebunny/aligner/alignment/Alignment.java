@@ -1,4 +1,4 @@
-package io.squarebunny.aligner;
+package io.squarebunny.aligner.alignment;
 
 import io.squarebunny.aligner.edit.Edit;
 import io.squarebunny.aligner.edit.Segment;

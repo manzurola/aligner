@@ -2,38 +2,34 @@ package io.squarebunny.aligner.impl;
 
 
 import io.squarebunny.aligner.Aligner;
-import io.squarebunny.aligner.Alignment;
+import io.squarebunny.aligner.alignment.Alignment;
 import io.squarebunny.aligner.edit.Edit;
 import io.squarebunny.aligner.edit.Operation;
 import io.squarebunny.aligner.edit.Segment;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiPredicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static io.squarebunny.aligner.edit.Operation.*;
 
 /**
  * This implementation is a port of <a href="https://github.com/chrisjbryant/errant/blob/master/errant/alignment.py">
- *     https://github.com/chrisjbryant/errant/blob/master/errant/alignment.py</a>.
- *
- *
- * @param <T>
+ * https://github.com/chrisjbryant/errant/blob/master/errant/alignment.py</a>.
  */
 public class DamerauLevenshtein<T> implements Aligner<T> {
 
     private final CostFunction<T> costFunction;
-    private final BiPredicate<T, T> isEqual;
-    private final BiPredicate<List<T>, List<T>> isTransposed;
+    private final BiPredicate<T, T> equalizer;
+    private final Comparator<T> comparator;
 
     public DamerauLevenshtein(CostFunction<T> costFunction,
-                              BiPredicate<T, T> isEqual,
-                              BiPredicate<List<T>, List<T>> isTransposed) {
-        this.costFunction = costFunction;
-        this.isEqual = isEqual;
-        this.isTransposed = isTransposed;
+                              BiPredicate<T, T> equalizer,
+                              Comparator<T> comparator) {
+        this.costFunction = Objects.requireNonNull(costFunction);
+        this.equalizer = Objects.requireNonNull(equalizer);
+        this.comparator = comparator;
     }
 
     @Override
@@ -51,7 +47,7 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
                 T sourceToken = source.get(i);
                 T targetToken = target.get(j);
 
-                if (isEqual.test(sourceToken, targetToken)) {
+                if (equalizer.test(sourceToken, targetToken)) {
                     costMatrix[i + 1][j + 1] = costMatrix[i][j];
                     opMatrix[i + 1][j + 1] = "M";
 
@@ -64,19 +60,22 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
                     // Traverse the diagonal while there is not a Match.
                     double transCost = Double.MAX_VALUE;
                     int k = 1;
-                    while (i - k >= 0 && j - k >= 0 && costMatrix[i - k + 1][j - k + 1] != costMatrix[i - k][j - k]) {
+                    if (comparator != null) {
+                        while (i - k >= 0 && j - k >= 0 && costMatrix[i - k + 1][j - k + 1] != costMatrix[i - k][j - k]) {
 
-                        List<T> sourceSublist = source.subList(i - k, i + 1);
-                        List<T> targetSublist = target.subList(j - k, j + 1);
+                            List<T> sourceSublist = source.subList(i - k, i + 1);
+                            List<T> targetSublist = target.subList(j - k, j + 1);
+                            boolean isTransposed = isTransposed(sourceSublist, targetSublist);
 
-                        if (isTransposed.test(sourceSublist, targetSublist)) {
-                            transCost = costMatrix[i - k][j - k] + costFunction.transposeCost(
-                                    sourceSublist,
-                                    targetSublist);
-                            break;
+                            if (isTransposed) {
+                                transCost = costMatrix[i - k][j - k] + costFunction.transposeCost(
+                                        sourceSublist,
+                                        targetSublist);
+                                break;
+                            }
+
+                            k += 1;
                         }
-
-                        k += 1;
                     }
                     // Costs
                     // TODO fix this hack - using the index of the list at the switch below
@@ -139,6 +138,23 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
             opMatrix[0][j] = "I";
         }
         return opMatrix;
+    }
+
+    private boolean isTransposed(List<T> source, List<T> target) {
+        List<T> sourceSublist = source
+                .stream()
+                .sorted(comparator)
+                .collect(Collectors.toList());
+
+        List<T> targetSublist = target
+                .stream()
+                .sorted(comparator)
+                .collect(Collectors.toList());
+
+        return IntStream.range(0, sourceSublist.size())
+                .allMatch(index -> comparator.compare(
+                        sourceSublist.get(index),
+                        targetSublist.get(index)) == 0);
     }
 
     private List<Edit<T>> getCheapestAlignmentSequence(String[][] opMatrix,

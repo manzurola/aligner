@@ -1,6 +1,5 @@
 package io.squarebunny.aligner.edit;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -12,7 +11,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
-public final class Segment<T> implements Serializable, Comparable<Segment<T>> {
+public final class Segment<T> implements Comparable<Segment<T>> {
 
     private final int position;
     private final List<T> tokens;
