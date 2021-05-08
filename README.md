@@ -22,7 +22,7 @@ Here are some recommended resources to catch up on Edit Distance in general:
 
 ## Quick Start / Configurable Damerau Levenshtein
 
-```
+```java
 // The source and target lists to be aligned.
 // An alignment will contain edits that describe how to transform source into target.
 
