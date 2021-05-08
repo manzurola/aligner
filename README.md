@@ -59,4 +59,4 @@ assertEquals(2.0 / 3.0, actual.distance());
 
 Check out the tests for more examples. 
 
-Ping me for comments.
+Contributions and issues are welcome.
