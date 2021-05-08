@@ -20,40 +20,6 @@ Here are some recommended resources to catch up on Edit Distance in general:
 
 ## Quick Start / Configurable Damerau Levenshtein
 
-```
-  // The source and target lists to be aligned.
-  // An alignment will contain edits that describe how to transform source into target.
-  
-  List<Integer> source = List.of(1, 3, 3);
-  List<Integer> target = List.of(1, 2, 3);
-
-  // The equality operation is used to determine whether two elements are equal
-  BiPredicate<Integer, Integer> equalizer = Integer::equals;
-  
-  // The comparator is used to sort and compare two candidate lists for transposition
-  Comparator<Integer> comparator = Integer::compareTo;
-  
-  // The cost function disables substitution for elements with values (3,2) by returning a Double.MAX_VALUE when matched
-  BiFunction<Integer, Integer, Double> substituteCost = (s, t) -> s == 3 && t == 2 ? Double.MAX_VALUE : 1.0;
-
-  // A custom damerau levenshtein aligner
-  Aligner<Integer> aligner = Aligner.damerauLevenshtein(equalizer, comparator, substituteCost);
-
-  // The expected list of edits
-  List<Edit<Integer>> expected = List.of(
-          Edit.builder().equal(1).and(1).atPosition(0, 0),
-          Edit.builder().delete(3).atPosition(1, 1),
-          Edit.builder().insert(2).atPosition(2, 1),
-          Edit.builder().equal(3).and(3).atPosition(2, 2)
-  );
-
-  // Align the two lists
-  Alignment<Integer> actual = aligner.align(source, target);
-
-  // Assert expected results
-  assertEquals(expected, actual.edits());
-  assertEquals(2.0, actual.cost());
-  assertEquals(2.0 / 3.0, actual.distance());
-```
+https://github.com/manzurola/aligner/blob/f57d580fc068bf4116df273d51624f36a867a2c8/src/test/java/io/squarebunny/aligner/AlignerTest.java#L25-L54
 
 Check out the tests for more example uses. Ping me for comments.
