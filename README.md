@@ -20,7 +20,21 @@ Here are some recommended resources to catch up on Edit Distance in general:
 7. Patch class to patch a list of edits into a target list (beta, see tests)
 8. And more...
 
-## Quick Start / Configurable Damerau Levenshtein
+## Quick Start
+
+### Step 1 - Create an Aligner
+
+```java
+Aligner<String> aligner = Aligner.damerauLevenshtein();
+```
+
+### Step 2 - Align
+
+```java
+aligner.align(source, target);
+```
+
+## Advanced - Configurable Aligner with expected alignment test
 
 ```java
 // The source and target lists to be aligned.
