@@ -12,16 +12,6 @@ public interface Aligner<T> {
 
     Alignment<T> align(List<T> source, List<T> target);
 
-    @Deprecated
-    static <T> AlignerBuilder<T> builder() {
-        return new AlignerBuilder<>();
-    }
-
-    @Deprecated
-    static <T> AlignerBuilder<T> builder(Class<T> forType) {
-        return new AlignerBuilder<>();
-    }
-
     static <T> Aligner<T> levenshtein() {
         return new AlignerBuilder<T>()
                 .setEqualizer(T::equals)
@@ -49,10 +39,10 @@ public interface Aligner<T> {
                 .build();
     }
 
-    static <T> Aligner<T> damerauLevenshtein(Comparator<T> comparator) {
+    static <T extends Comparable<T>> Aligner<T> damerauLevenshtein(BiPredicate<T, T> equalizer) {
         return new AlignerBuilder<T>()
-                .setEqualizer(Object::equals)
-                .setComparator(comparator)
+                .setEqualizer(equalizer)
+                .setComparator(Comparator.naturalOrder())
                 .build();
     }
 

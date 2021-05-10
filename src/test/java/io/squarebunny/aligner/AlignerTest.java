@@ -13,12 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AlignerTest {
 
-    /**
-     * Configure and aligner with a custom equalizer, comparator and substitution cost function
-     * The equality operation is used to determine whether two elements are equal
-     * The comparator is used to sort and compare two candidate lists for transposition
-     * The cost function disables substitution for elements with values (3,2) by returning a Double.MAX_VALUE when matched
-     */
     @Test
     void customDamerauLevenshtein() {
 
