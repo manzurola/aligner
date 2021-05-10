@@ -4,6 +4,8 @@ Determine the minimal Edit path between two lists (source and target).
 
 This is a Java implementation of a configurable [Damerau Levenshtein](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) aligner, inspired by [Errant by Chris Bryant](https://github.com/chrisjbryant/errant/blob/master/errant/alignment.py) and [diff_match_patch by Neil Fraser](https://github.com/google/diff-match-patch).
 
+I'm using it for annotating grammar mistakes in parallel texts and for speech pronunciation assessment.
+
 Here are some recommended resources to catch up on Edit Distance in general:
 1. [Speech and Language Processing](https://web.stanford.edu/~jurafsky/slp3/2.pdf)
 2. [Stanford](https://web.stanford.edu/class/cs124/lec/med.pdf)
