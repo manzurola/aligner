@@ -35,6 +35,9 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
     @Override
     public Alignment<T> align(List<T> source,
                               List<T> target) {
+        Objects.requireNonNull(source);
+        Objects.requireNonNull(target);
+
         int originalLength = source.size();
         int correctedLength = target.size();
 
