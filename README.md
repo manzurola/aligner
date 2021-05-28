@@ -33,7 +33,7 @@ Aligner<String> aligner = Aligner.damerauLevenshtein();
 ### Step 2 - Align
 
 ```java
-aligner.align(source, target);
+Alignment<String> alignment = aligner.align(source, target);
 ```
 
 ## Advanced - Configurable Aligner with expected alignment test
