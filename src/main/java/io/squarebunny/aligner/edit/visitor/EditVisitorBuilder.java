@@ -1,67 +1,67 @@
 package io.squarebunny.aligner.edit.visitor;
 
-import io.squarebunny.aligner.edit.AbstractEdit;
+import io.squarebunny.aligner.edit.Edit;
 
 import java.util.function.Function;
 
-public class EditVisitorBuilder<E extends AbstractEdit<?, ?>, R> {
+public class EditVisitorBuilder<R> {
 
-    private Function<E, R> onEqual = (e) -> null;
-    private Function<E, R> onInsert = (e) -> null;
-    private Function<E, R> onDelete = (e) -> null;
-    private Function<E, R> onSubstitute = (e) -> null;
-    private Function<E, R> onTranspose = (e) -> null;
+    private Function<Edit<?>, R> onEqual = (e) -> null;
+    private Function<Edit<?>, R> onInsert = (e) -> null;
+    private Function<Edit<?>, R> onDelete = (e) -> null;
+    private Function<Edit<?>, R> onSubstitute = (e) -> null;
+    private Function<Edit<?>, R> onTranspose = (e) -> null;
 
-    public EditVisitorBuilder<E, R> onEqual(Function<E, R> visitor) {
+    public EditVisitorBuilder<R> onEqual(Function<Edit<?>, R> visitor) {
         this.onEqual = visitor;
         return this;
     }
 
-    public EditVisitorBuilder<E, R> onInsert(Function<E, R> visitor) {
+    public EditVisitorBuilder<R> onInsert(Function<Edit<?>, R> visitor) {
         this.onInsert = visitor;
         return this;
     }
 
-    public EditVisitorBuilder<E, R> onDelete(Function<E, R> visitor) {
+    public EditVisitorBuilder<R> onDelete(Function<Edit<?>, R> visitor) {
         this.onDelete = visitor;
         return this;
     }
 
-    public EditVisitorBuilder<E, R> onSubstitute(Function<E, R> visitor) {
+    public EditVisitorBuilder<R> onSubstitute(Function<Edit<?>, R> visitor) {
         this.onSubstitute = visitor;
         return this;
     }
 
-    public EditVisitorBuilder<E, R> onTranspose(Function<E, R> visitor) {
+    public EditVisitorBuilder<R> onTranspose(Function<Edit<?>, R> visitor) {
         this.onTranspose = visitor;
         return this;
     }
 
-    public EditVisitor<E, R> build() {
+    public EditVisitor<R> build() {
         return new EditVisitor<>() {
 
             @Override
-            public R visitEqual(E edit) {
+            public R visitEqual(Edit<?> edit) {
                 return onEqual.apply(edit);
             }
 
             @Override
-            public R visitInsert(E edit) {
+            public R visitInsert(Edit<?> edit) {
                 return onInsert.apply(edit);
             }
 
             @Override
-            public R visitDelete(E edit) {
+            public R visitDelete(Edit<?> edit) {
                 return onDelete.apply(edit);
             }
 
             @Override
-            public R visitSubstitute(E edit) {
+            public R visitSubstitute(Edit<?> edit) {
                 return onSubstitute.apply(edit);
             }
 
             @Override
-            public R visitTranspose(E edit) {
+            public R visitTranspose(Edit<?> edit) {
                 return onTranspose.apply(edit);
             }
         };

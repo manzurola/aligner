@@ -1,19 +1,15 @@
 package io.squarebunny.aligner.edit.comparator;
 
-import io.squarebunny.aligner.edit.AbstractEdit;
+import io.squarebunny.aligner.edit.Edit;
 
-import java.io.Serializable;
 import java.util.Comparator;
 
-public class EditComparator implements Comparator<AbstractEdit<?, ?>>, Serializable {
-    private static final long serialVersionUID = 1L;
-    public static final Comparator<AbstractEdit<?, ?>> INSTANCE = new EditComparator();
+public enum EditComparator implements Comparator<Edit<?>> {
 
-    public EditComparator() {
-    }
+    INSTANCE;
 
     @Override
-    public int compare(AbstractEdit<?, ?> a, AbstractEdit<?, ?> b) {
+    public int compare(Edit<?> a, Edit<?> b) {
         int sourceComparison = Integer.compare(a.source().position(), b.source().position());
         int targetComparison = Integer.compare(a.target().position(), b.target().position());
         return sourceComparison != 0 ? sourceComparison : targetComparison;

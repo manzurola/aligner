@@ -88,38 +88,77 @@ public final class Segment<T> implements Comparable<Segment<T>> {
         return of(position, collect);
     }
 
+    /**
+     * Get the indices that this segment references.
+     * @return an IntStream of range {@code (position, position + size())}.
+     */
     public final IntStream indices() {
         return IntStream.range(position, position + size());
     }
 
+    /**
+     * Selects the current segment from the supplied list, based on the position of this segment.
+     * For example, given a list of length 10 and a segment of size 4 starting from position 3,
+     * the returned segment will contain elements 3,4,5,6 from the supplied list.
+     * <p>
+     * This is equivalent of running {@code mapWithIndex(items::get)};
+     *
+     * @param items
+     * @param <E>
+     * @return
+     */
+    @Deprecated
     public final <E> Segment<E> select(List<E> items) {
         return mapWithIndex(items::get);
     }
 
-    public final Segment<T> mergeWith(Segment<T> next) {
-        if (equals(next)) {
+    /**
+     * Concatenates this {@code Segment} with {@code other}, resulting in a new object representing both adjacent chunks as one consecutive Segment
+     * starting at position {@code min(this.position, other.position)}.
+     * <p>
+     * If both edits are equal then {@code this} is returned.
+     * If edits are not neighbours, i.e. {@link #isNeighbour(Segment)} returns false, an IllegalArgumentException is thrown.
+     * <p>
+     *
+     * @param other an adjacent segment, either before or after {@code this}
+     * @return a new Segment if the conditions for concatenation are met, {@code this} if {@code this} and {@code other} are equal.
+     * @throws IllegalArgumentException if {@code other} is not a valid neighbour, i.e. {@link #isNeighbour(Segment)} returns false
+     */
+    public final Segment<T> concatenate(Segment<T> other) {
+        if (equals(other)) {
             return this;
         }
 
-        if (!canMergeWith(next)) {
-            throw new IllegalArgumentException("next is not adjacent to this");
+        if (!isNeighbour(other)) {
+            throw new IllegalArgumentException("other is not adjacent to this");
         }
 
-        int newPosition = position();
+        int newPosition = Math.min(position(), other.position());
         List<T> newTokens = Stream
-                .concat(stream(), next.stream())
+                .concat(stream(), other.stream())
                 .collect(Collectors.toList());
 
         return Segment.of(newPosition, newTokens);
     }
 
-    public final boolean canMergeWith(Segment<T> next) {
-        List<Segment<T>> sorted = Stream.of(this, next)
+    /**
+     * Returns true if other is adjacent to this, either from to left or to the right of {@code this}.
+     *
+     * @param other an adjacent Segment, such that when both are sorted, {@code left.position() + left.size() == right.position()} returns true.
+     * @return true if segments are neighbours, false otherwise.
+     */
+    public final boolean isNeighbour(Segment<T> other) {
+        List<Segment<T>> sorted = Stream.of(this, other)
                 .sorted()
                 .collect(Collectors.toList());
         Segment<T> left = sorted.get(0);
         Segment<T> right = sorted.get(1);
         return left.position() + left.size() == right.position();
+    }
+
+    @Override
+    public final int compareTo(Segment<T> o) {
+        return Integer.compare(position, o.position);
     }
 
     @Override
@@ -138,11 +177,9 @@ public final class Segment<T> implements Comparable<Segment<T>> {
 
     @Override
     public final String toString() {
-        return tokens.toString();
-    }
-
-    @Override
-    public int compareTo(Segment<T> o) {
-        return Integer.compare(position, o.position);
+        return "Segment{" +
+                "position=" + position +
+                ", tokens=" + tokens +
+                '}';
     }
 }

@@ -1,6 +1,7 @@
 package io.squarebunny.aligner.edit;
 
 import io.squarebunny.aligner.edit.builder.EditBuilder;
+import io.squarebunny.aligner.edit.comparator.EditComparator;
 import io.squarebunny.aligner.edit.visitor.EditVisitor;
 import io.squarebunny.aligner.edit.visitor.EditVisitorBuilder;
 
@@ -15,19 +16,25 @@ import java.util.stream.Stream;
 import static io.squarebunny.aligner.edit.Operation.SUBSTITUTE;
 import static io.squarebunny.aligner.edit.Operation.TRANSPOSE;
 
-public final class Edit<T> extends AbstractEdit<T, T> {
+public final class Edit<T> implements Comparable<Edit<T>> {
+
+    private final Operation operation;
+    private final Segment<T> source;
+    private final Segment<T> target;
 
     protected Edit(Operation operation,
                    Segment<T> source,
                    Segment<T> target) {
-        super(operation, source, target);
+        this.operation = Objects.requireNonNull(operation);
+        this.source = Objects.requireNonNull(source);
+        this.target = Objects.requireNonNull(target);
     }
 
     public static EditBuilder builder() {
         return new EditBuilder();
     }
 
-    public static <T, R> EditVisitorBuilder<Edit<T>, R> visitor() {
+    public static <T, R> EditVisitorBuilder<R> visitor() {
         return new EditVisitorBuilder<>();
     }
 
@@ -35,6 +42,18 @@ public final class Edit<T> extends AbstractEdit<T, T> {
                                  Segment<T> source,
                                  Segment<T> target) {
         return new Edit<>(operation, source, target);
+    }
+
+    public final Operation operation() {
+        return operation;
+    }
+
+    public final Segment<T> source() {
+        return source;
+    }
+
+    public final Segment<T> target() {
+        return target;
     }
 
     public final Stream<T> stream() {
@@ -71,7 +90,7 @@ public final class Edit<T> extends AbstractEdit<T, T> {
         return mapper.apply(this);
     }
 
-    public final <R> R accept(EditVisitor<Edit<T>, R> visitor) {
+    public final <R> R accept(EditVisitor<R> visitor) {
         switch (operation()) {
             case INSERT:
                 return visitor.visitInsert(this);
@@ -84,7 +103,7 @@ public final class Edit<T> extends AbstractEdit<T, T> {
             case EQUAL:
                 return visitor.visitEqual(this);
         }
-        throw new RuntimeException("Invalid Edit op");
+        throw new RuntimeException("Invalid Edit operation");
     }
 
     /**
@@ -114,14 +133,14 @@ public final class Edit<T> extends AbstractEdit<T, T> {
         }
 
         Operation operation = resolveMergedOperation(other);
-        Segment<T> source = left.source().mergeWith(right.source());
-        Segment<T> target = left.target().mergeWith(right.target());
+        Segment<T> source = left.source().concatenate(right.source());
+        Segment<T> target = left.target().concatenate(right.target());
 
         return Edit.of(operation, source, target);
     }
 
     public final boolean canMergeWith(Edit<T> other) {
-        return this.source().canMergeWith(other.source()) && this.target().canMergeWith(other.target());
+        return this.source().isNeighbour(other.source()) && this.target().isNeighbour(other.target());
     }
 
     private Operation resolveMergedOperation(Edit<T> other) {
@@ -133,5 +152,35 @@ public final class Edit<T> extends AbstractEdit<T, T> {
         }
 
         return operation();
+    }
+
+    @Override
+    public final int compareTo(Edit<T> o) {
+        return EditComparator.INSTANCE.compare(this, o);
+    }
+
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Edit<?> that = (Edit<?>) o;
+        return operation == that.operation &&
+                Objects.equals(source, that.source) &&
+                Objects.equals(target, that.target);
+    }
+
+    @Override
+    public final int hashCode() {
+        return Objects.hash(operation, source, target);
+    }
+
+    @Override
+    public final String toString() {
+        return "Edit[" + operation +
+                ", source=" + source +
+                ", target=" + target +
+                ", position= [" + source().position() + ", " + target.position() + "]" +
+                ']';
     }
 }

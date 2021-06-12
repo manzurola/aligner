@@ -1,18 +1,18 @@
 package io.squarebunny.aligner.edit.visitor;
 
-import io.squarebunny.aligner.edit.AbstractEdit;
+import io.squarebunny.aligner.edit.Edit;
 
-public interface EditVisitor<E extends AbstractEdit<?, ?>, R> {
+public interface EditVisitor<R> {
 
-    R visitEqual(E edit);
+    R visitEqual(Edit<?> edit);
 
-    R visitInsert(E edit);
+    R visitInsert(Edit<?> edit);
 
-    R visitDelete(E edit);
+    R visitDelete(Edit<?> edit);
 
-    R visitSubstitute(E edit);
+    R visitSubstitute(Edit<?> edit);
 
-    default R visitTranspose(E edit) {
+    default R visitTranspose(Edit<?> edit) {
         return visitSubstitute(edit);
     }
 }
