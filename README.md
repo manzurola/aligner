@@ -75,4 +75,4 @@ assertEquals(2.0 / 3.0, actual.distance());
 
 Check out the [tests](https://github.com/manzurola/aligner/blob/67618def27d18e0e29e4f07905a4509907b379a3/src/test/java/io/squarebunny/aligner/AlignerTest.java) for more examples. 
 
-Contributions and issues are welcome.
+[Contributions](https://github.com/manzurola/aligner/blob/a39d2719394fa258d3193e8258231950a3647920/CONTRIBUTING.md) are welcome.
