@@ -1,6 +1,4 @@
-package io.squarebunny.aligner.edit.builder;
-
-import io.squarebunny.aligner.edit.*;
+package io.squarebunny.aligner.edit;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -164,16 +162,17 @@ public final class EditBuilder {
         public Edit<T> build() {
             switch (operation) {
                 case EQUAL:
-                    break;
+                    return new EqualEdit<>(source, target);
                 case SUBSTITUTE:
                     return new SubstituteEdit<>(source, target);
-                    break;
                 case INSERT:
-                    break;
+                    return new InsertEdit<>(source, target);
                 case DELETE:
-                    break;
+                    return new DeleteEdit<>(source, target);
                 case TRANSPOSE:
-                    break;
+                    return new TransposeEdit<>(source, target);
+                default:
+                    throw new RuntimeException("Invalid edit operation");
             }
         }
     }

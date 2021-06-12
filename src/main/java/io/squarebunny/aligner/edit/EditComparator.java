@@ -1,6 +1,4 @@
-package io.squarebunny.aligner.edit.comparator;
-
-import io.squarebunny.aligner.edit.Edit;
+package io.squarebunny.aligner.edit;
 
 import java.util.Comparator;
 

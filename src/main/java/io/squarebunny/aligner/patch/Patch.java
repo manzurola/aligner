@@ -2,7 +2,7 @@ package io.squarebunny.aligner.patch;
 
 
 import io.squarebunny.aligner.edit.Edit;
-import io.squarebunny.aligner.edit.comparator.EditComparator;
+import io.squarebunny.aligner.edit.EditComparator;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
