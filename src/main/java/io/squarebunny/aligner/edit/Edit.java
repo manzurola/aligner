@@ -33,7 +33,7 @@ public abstract class Edit<T> implements Comparable<Edit<T>> {
 
     public abstract Operation operation();
 
-    public abstract  <R> R accept(EditVisitor<R> visitor);
+    public abstract  <R> R accept(EditVisitor<T, R> visitor);
 
     public final Segment<T> source() {
         return source;

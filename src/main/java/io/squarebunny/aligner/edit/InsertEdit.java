@@ -11,8 +11,8 @@ public class InsertEdit<T> extends Edit<T> {
     }
 
     @Override
-    public <R> R accept(EditVisitor<R> visitor) {
-        return visitor.visitInsert(this);
+    public <R> R accept(EditVisitor<T, R> visitor) {
+        return visitor.visit(this);
     }
 
     @Override
