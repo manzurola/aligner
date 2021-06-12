@@ -57,7 +57,7 @@ BiPredicate<Integer, Integer> equalizer = Integer::equals;
 // The comparator is used to sort and compare two candidate lists for transposition
 Comparator<Integer> comparator = Integer::compareTo;
 
-// The cost function disables substitution for elements with values (3,2) by returning a Double.MAX_VALUE when matched
+// This cost function disables substitution for elements with values (3,2) by returning a Double.MAX_VALUE when matched
 BiFunction<Integer, Integer, Double> substituteCost = (s, t) -> s == 3 && t == 2 ? Double.MAX_VALUE : 1.0;
 
 // A custom damerau levenshtein aligner
