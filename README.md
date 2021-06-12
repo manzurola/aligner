@@ -24,7 +24,7 @@ Here are some recommended resources to catch up on Edit Distance in general:
 
 ## Use via github packages
 
-Currently this package is only available via github packages. You will need to (configure maven to work with Github's repo)[https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry].
+Currently this package is only available via github packages. You will need to [configure maven to work with Github's repo](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry).
 This includes changing your settings.xml file and generating a Private Access Token in github. Make sure to enable snapshots.
 
 ## Quick Start
