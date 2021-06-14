@@ -82,8 +82,9 @@ assertEquals(2.0 / 3.0, actual.distance());
 
 # Performance
 
-Aligning two 1M Integer lists takes around 850ms on my 3.5 GHz Dual-Core Intel Core i7 Macbook Pro.
-I've yet to test the heap size but I suspect it is rather large as the aligner uses two n x n matrices internally.
+Aligning two Integer lists of size 100 takes around 1500ms on my 3.5 GHz Dual-Core Intel Core i7 Macbook Pro.
+Considerably slow. The heap size is also not great and explodes with two lists of size 1000.
+Definitely room for improvement!
 
 # More Use Cases
 
