@@ -80,6 +80,15 @@ assertEquals(2.0, actual.cost());
 assertEquals(2.0 / 3.0, actual.distance());
 ```
 
+# Performance
+
+Aligning two 1M Integer lists takes around 850ms on my 3.5 GHz Dual-Core Intel Core i7 Macbook Pro.
+I've yet to test the heap size but I suspect it is rather large as the aligner uses two n x n matrices internally.
+
+# More Use Cases
+
 Check out the [tests](https://github.com/manzurola/aligner/blob/67618def27d18e0e29e4f07905a4509907b379a3/src/test/java/io/squarebunny/aligner/AlignerTest.java) for more examples. 
+
+# Contributions
 
 [Contributions](https://github.com/manzurola/aligner/blob/a39d2719394fa258d3193e8258231950a3647920/CONTRIBUTING.md) are welcome.
