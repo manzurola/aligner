@@ -3,7 +3,6 @@ package edu.guym.aligner.impl;
 import edu.guym.aligner.Aligner;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -16,7 +15,7 @@ public final class AlignerBuilder<T> {
     private Function<T, Double> deleteCost = (s) -> 1.0;
     private Function<T, Double> insertCost = (t) -> 1.0;
     private BiFunction<T, T, Double> substituteCost = (s, t) -> 1.0;
-    private BiFunction<List<T>, List<T>, Double> transposeCost = (s, t) -> s.size() - 1.0;
+    private BiFunction<T[], T[], Double> transposeCost = (s, t) -> s.length - 1.0;
 
     public final AlignerBuilder<T> setDeleteCost(Function<T, Double> deleteCost) {
         this.deleteCost = deleteCost;
@@ -33,7 +32,7 @@ public final class AlignerBuilder<T> {
         return this;
     }
 
-    public final AlignerBuilder<T> setTransposeCost(BiFunction<List<T>, List<T>, Double> transposeCost) {
+    public final AlignerBuilder<T> setTransposeCost(BiFunction<T[], T[], Double> transposeCost) {
         this.transposeCost = transposeCost;
         return this;
     }
@@ -66,7 +65,7 @@ public final class AlignerBuilder<T> {
             }
 
             @Override
-            public double transposeCost(List<T> source, List<T> target) {
+            public double transposeCost(T[] source, T[] target) {
                 return transposeCost.apply(source, target);
             }
         }, equalizer, comparator);

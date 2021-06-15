@@ -113,47 +113,19 @@ public final class Segment<T> implements Comparable<Segment<T>> {
     }
 
     /**
-     * Concatenates this {@code Segment} with {@code other}, resulting in a new object representing both adjacent chunks as one consecutive Segment
-     * starting at position {@code min(this.position, other.position)}.
-     * <p>
-     * If both edits are equal then {@code this} is returned.
-     * If edits are not neighbours, i.e. {@link #isNeighbour(Segment)} returns false, an IllegalArgumentException is thrown.
-     * <p>
-     *
-     * @param other an adjacent segment, either before or after {@code this}
-     * @return a new Segment if the conditions for concatenation are met, {@code this} if {@code this} and {@code other} are equal.
-     * @throws IllegalArgumentException if {@code other} is not a valid neighbour, i.e. {@link #isNeighbour(Segment)} returns false
+     * Appends {@code items} to the end of the segment.
+     * @return a new segment with new tokens as tokens() + items.
      */
-    public final Segment<T> concatenate(Segment<T> other) {
-        if (equals(other)) {
+    public final Segment<T> append(List<T> items) {
+        if (items.isEmpty()) {
             return this;
         }
 
-        if (!isNeighbour(other)) {
-            throw new IllegalArgumentException("other is not adjacent to this");
-        }
-
-        int newPosition = Math.min(position(), other.position());
         List<T> newTokens = Stream
-                .concat(stream(), other.stream())
+                .concat(stream(), items.stream())
                 .collect(Collectors.toList());
 
-        return Segment.of(newPosition, newTokens);
-    }
-
-    /**
-     * Returns true if other is adjacent to this, either from to left or to the right of {@code this}.
-     *
-     * @param other an adjacent Segment, such that when both are sorted, {@code left.position() + left.size() == right.position()} returns true.
-     * @return true if segments are neighbours, false otherwise.
-     */
-    public final boolean isNeighbour(Segment<T> other) {
-        List<Segment<T>> sorted = Stream.of(this, other)
-                .sorted()
-                .collect(Collectors.toList());
-        Segment<T> left = sorted.get(0);
-        Segment<T> right = sorted.get(1);
-        return left.position() + left.size() == right.position();
+        return Segment.of(position, newTokens);
     }
 
     @Override

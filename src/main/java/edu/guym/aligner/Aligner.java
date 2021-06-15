@@ -73,13 +73,6 @@ public interface Aligner<T> {
     }
 
     /**
-     *
-     * @param equalizer
-     * @param <T>
-     * @return
-     */
-
-    /**
      * Get a new damerau-levenshtein aligner with a custom {@code equals} delegate function.
      * <br/>
      * Param T must extend {@link Comparable}.

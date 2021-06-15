@@ -2,12 +2,16 @@ package edu.guym.aligner;
 
 import edu.guym.aligner.alignment.Alignment;
 import edu.guym.aligner.edit.Edit;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -116,16 +120,19 @@ public class AlignerTest {
                 Comparator.comparing(element -> element.value.toLowerCase())
         );
 
-        List<Element> source = List.of(new Element("Guy"), new Element("IS"), new Element("GOOd"));
-        List<Element> target = List.of(new Element("is"), new Element("good"), new Element("guy"));
+        List<Element> source = List.of(new Element("a"), new Element("Guy"), new Element("IS"), new Element("GOOd"));
+        List<Element> target = List.of(new Element("a"), new Element("is"), new Element("good"), new Element("guy"));
 
         List<Edit<Element>> expected = List.of(
-                Edit.builder().transpose(source).to(target).atPosition(0, 0)
+                Edit.builder()
+                        .transpose(source.subList(1, 4))
+                        .to(target.subList(1, 4))
+                        .atPosition(1, 1)
         );
 
         Alignment<Element> alignment = aligner.align(source, target);
 
-        assertEquals(expected, alignment.edits());
+        assertEquals(expected, alignment.diffs());
     }
 
     private static class Element {
@@ -134,5 +141,46 @@ public class AlignerTest {
         public Element(String value) {
             this.value = value;
         }
+
+        @Override
+        public String toString() {
+            return value;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Element element = (Element) o;
+            return Objects.equals(value, element.value);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(value);
+        }
     }
+
+    @Disabled
+    @Test
+    void veryLargeAndRandomIntegerListAlignment() {
+        List<Integer> source = new Random().ints(100)
+                .boxed()
+                .collect(Collectors.toList());
+        List<Integer> target = new Random().ints(100)
+                .boxed()
+                .collect(Collectors.toList());
+
+        System.out.println("aligning...");
+        Aligner<Integer> aligner = Aligner.damerauLevenshtein();
+
+        long startTime = System.nanoTime();
+        Alignment<Integer> alignment = aligner.align(source, target);
+        long endTime = System.nanoTime();
+
+        System.out.println("elapsed time millis:" + (endTime - startTime) / 1000000);
+
+        System.out.println(alignment.distance());
+    }
+
 }

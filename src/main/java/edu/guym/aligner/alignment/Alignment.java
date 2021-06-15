@@ -1,6 +1,7 @@
 package edu.guym.aligner.alignment;
 
 import edu.guym.aligner.edit.Edit;
+import edu.guym.aligner.edit.EqualEdit;
 import edu.guym.aligner.edit.Segment;
 
 import java.util.List;
@@ -27,6 +28,12 @@ public final class Alignment<T> {
 
     public final List<Edit<T>> edits() {
         return edits;
+    }
+
+    public final List<Edit<T>> diffs() {
+        return edits.stream()
+                .filter(e -> !(e instanceof EqualEdit))
+                .collect(Collectors.toList());
     }
 
     public final Stream<Edit<T>> stream() {

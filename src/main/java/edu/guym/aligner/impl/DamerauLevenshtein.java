@@ -38,8 +38,11 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
         Objects.requireNonNull(source);
         Objects.requireNonNull(target);
 
-        int originalLength = source.size();
-        int correctedLength = target.size();
+        T[] sourceArr = (T[]) source.toArray();
+        T[] targetArr = (T[]) target.toArray();
+
+        int originalLength = sourceArr.length;
+        int correctedLength = targetArr.length;
 
         double[][] costMatrix = initCostMatrix(originalLength, correctedLength);
         String[][] opMatrix = initOpMatrix(originalLength, correctedLength);
@@ -47,8 +50,8 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
         for (int i = 0; i < originalLength; i++) {
             for (int j = 0; j < correctedLength; j++) {
 
-                T sourceToken = source.get(i);
-                T targetToken = target.get(j);
+                T sourceToken = sourceArr[i];
+                T targetToken = targetArr[j];
 
                 if (equalizer.test(sourceToken, targetToken)) {
                     costMatrix[i + 1][j + 1] = costMatrix[i][j];
@@ -66,14 +69,15 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
                     if (comparator != null) {
                         while (i - k >= 0 && j - k >= 0 && costMatrix[i - k + 1][j - k + 1] != costMatrix[i - k][j - k]) {
 
-                            List<T> sourceSublist = source.subList(i - k, i + 1);
-                            List<T> targetSublist = target.subList(j - k, j + 1);
-                            boolean isTransposed = isTransposed(sourceSublist, targetSublist);
+                            T[] sourceSub = Arrays.copyOfRange(sourceArr, i - k, i + 1);
+                            T[] targetSub = Arrays.copyOfRange(targetArr, j - k, j + 1);
+
+                            boolean isTransposed = isTransposed(sourceSub, targetSub);
 
                             if (isTransposed) {
                                 transCost = costMatrix[i - k][j - k] + costFunction.transposeCost(
-                                        sourceSublist,
-                                        targetSublist);
+                                        sourceSub,
+                                        targetSub);
                                 break;
                             }
 
@@ -143,21 +147,13 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
         return opMatrix;
     }
 
-    private boolean isTransposed(List<T> source, List<T> target) {
-        List<T> sourceSublist = source
-                .stream()
-                .sorted(comparator)
-                .collect(Collectors.toList());
-
-        List<T> targetSublist = target
-                .stream()
-                .sorted(comparator)
-                .collect(Collectors.toList());
-
-        return IntStream.range(0, sourceSublist.size())
-                .allMatch(index -> comparator.compare(
-                        sourceSublist.get(index),
-                        targetSublist.get(index)) == 0);
+    private boolean isTransposed(T[] source,
+                                 T[] target) {
+        Arrays.sort(source, comparator);
+        Arrays.sort(target, comparator);
+        return IntStream
+                .range(0, source.length)
+                .allMatch(index -> comparator.compare(source[index], target[index]) == 0);
     }
 
     private List<Edit<T>> getCheapestAlignmentSequence(String[][] opMatrix,

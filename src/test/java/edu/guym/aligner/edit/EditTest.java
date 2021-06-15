@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 public class EditTest {
 
     @Test
-    void mergeAdjacent() {
+    void mergeIsSymmetrical() {
 
         Edit<String> left = Edit.builder()
                 .delete("i")

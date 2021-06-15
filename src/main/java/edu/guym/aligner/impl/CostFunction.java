@@ -1,7 +1,5 @@
 package edu.guym.aligner.impl;
 
-import java.util.List;
-
 public interface CostFunction<T> {
 
     double deleteCost(T source);
@@ -10,6 +8,6 @@ public interface CostFunction<T> {
 
     double substituteCost(T source, T target);
 
-    double transposeCost(List<T> source, List<T> target);
+    double transposeCost(T[] source, T[] target);
 
 }

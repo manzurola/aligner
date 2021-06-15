@@ -1,9 +1,11 @@
 package edu.guym.aligner.edit;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class Edit<T> implements Comparable<Edit<T>> {
@@ -33,7 +35,7 @@ public abstract class Edit<T> implements Comparable<Edit<T>> {
 
     public abstract Operation operation();
 
-    public abstract  <R> R accept(EditVisitor<T, R> visitor);
+    public abstract <R> R accept(EditVisitor<T, R> visitor);
 
     public final Segment<T> source() {
         return source;
@@ -65,7 +67,7 @@ public abstract class Edit<T> implements Comparable<Edit<T>> {
     }
 
     public <E> Edit<E> mapSegments(Function<Segment<T>, Segment<E>> sourceMapper,
-                                         Function<Segment<T>, Segment<E>> targetMapper) {
+                                   Function<Segment<T>, Segment<E>> targetMapper) {
         return of(
                 operation(),
                 sourceMapper.apply(source()),
@@ -79,10 +81,15 @@ public abstract class Edit<T> implements Comparable<Edit<T>> {
 
     /**
      * Merges this edit with the supplied other, creating a new edit.
+     * <p>
+     * The edits must be adjacent for the merge to be successful.
+     * <p>
+     * To test adjacency we first sort the edits, and test if left {@link #isLeftSiblingOf(Edit)} right. if the test fails an exception is thrown.
+     * <p>
      * The merged edit will contain all elements but may have a different operation.
      * If both edits are equal, this is returned.
-     * If edits cannot be merged (due to non adjacent segments), an exception is thrown.
-     *
+     * <p>
+     * This method is symmetrical, i.e. given editA and editB, editA.mergeWith(editB) equals editB.mergeWith(editA).
      * @param other
      * @return the merged edit
      */
@@ -93,19 +100,30 @@ public abstract class Edit<T> implements Comparable<Edit<T>> {
             return this;
         }
 
-        if (!canMergeWith(other)) {
+        List<Edit<T>> sorted = Stream.of(this, other)
+                .sorted()
+                .collect(Collectors.toList());
+        Edit<T> left = sorted.get(0);
+        Edit<T> right = sorted.get(1);
+
+        if (!left.isLeftSiblingOf(right)) {
             throw new IllegalArgumentException("cannot merge edits");
         }
 
         Operation operation = mergeOperations(other.operation());
-        Segment<T> source = source().concatenate(other.source());
-        Segment<T> target = target().concatenate(other.target());
+        Segment<T> source = left.source.append(right.source.tokens());
+        Segment<T> target = left.target.append(right.target.tokens());
 
         return Edit.of(operation, source, target);
     }
 
-    public final boolean canMergeWith(Edit<T> other) {
-        return this.source().isNeighbour(other.source()) && this.target().isNeighbour(other.target());
+    public final boolean isLeftSiblingOf(Edit<T> other) {
+        Segment<T> leftSource = this.source;
+        Segment<T> leftTarget = this.target;
+        Segment<T> rightSource = other.source;
+        Segment<T> rightTarget = other.target;
+        return leftSource.position() + leftSource.size() == rightSource.position() &&
+                leftTarget.position() + leftTarget.size() == rightTarget.position();
     }
 
     protected abstract Operation mergeOperations(Operation other);
