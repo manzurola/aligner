@@ -27,7 +27,7 @@ Refer to the packages tab on the right for the recommended maven dependency conf
 You will need to [configure maven to work with Github's repo](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry).
 This includes changing your settings.xml file and generating a Private Access Token in github. Make sure to enable snapshots.
 
-## Quick Start
+# Quick Start
 
 ### Step 1 - Create an Aligner
 
@@ -41,7 +41,7 @@ Aligner<String> aligner = Aligner.damerauLevenshtein();
 Alignment<String> alignment = aligner.align(source, target);
 ```
 
-## Advanced - Configurable Aligner with expected alignment test
+# Advanced - Configurable Aligner with expected alignment test
 
 ```java
 // The source and target lists to be aligned.
