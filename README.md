@@ -11,14 +11,14 @@ Here are some recommended resources to catch up on Edit Distance in general:
 
 ## Features
 
-1. Supports 5 Edit operations - Insert, Delete, Substitute, Transpose and Equal
-2. Variable length transposition edit
-3. Custom Equality function
-4. Custom Comparator to determine transposition
-5. Edit Ratio, Distance and Cost given on an Alignment result
-6. Powerfull Edit class supports merge operations and functional stream like operations
-7. Patch class to patch a list of edits into a target list (beta, see tests)
-8. And more...
+* Supports 5 Edit operations - Insert, Delete, Substitute, Transpose and Equal
+* Variable length transposition edit
+* Custom Equality function
+* Custom Comparator to determine transposition
+* Edit Ratio, Distance and Cost given on an Alignment result
+* Powerfull Edit class supports merge operations and functional stream like operations
+* Patch class to patch a list of edits into a target list (beta, see tests)
+* And more...
 
 ## Use via github packages
 
