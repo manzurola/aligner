@@ -41,7 +41,9 @@ Aligner<String> aligner = Aligner.damerauLevenshtein();
 Alignment<String> alignment = aligner.align(source, target);
 ```
 
-# Advanced - Configurable Aligner with expected alignment test
+# Advanced
+
+### Custom Aligner with expected alignment test
 
 ```java
 // The source and target lists to be aligned.
