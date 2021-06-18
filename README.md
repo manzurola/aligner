@@ -22,7 +22,7 @@ Here are some recommended resources to catch up on Edit Distance in general:
 
 ## Use via github packages
 
-To the right you will see the packages tab. Follow through it and you will see the dependency that should be added to your project's maven file.
+Refer to the packages tab on the right for the recommended maven dependency configuraion.
 
 You will need to [configure maven to work with Github's repo](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry).
 This includes changing your settings.xml file and generating a Private Access Token in github. Make sure to enable snapshots.
