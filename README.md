@@ -27,23 +27,23 @@ Refer to the packages tab on the right for the recommended maven dependency conf
 You will need to [configure maven to work with Github's repo](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry).
 This includes changing your settings.xml file and generating a Private Access Token in github. Make sure to enable snapshots.
 
-# Quick Start
+## Quick Start
 
-### Step 1 - Create an Aligner
+Step 1 - Create an Aligner
 
 ```java
 Aligner<String> aligner = Aligner.damerauLevenshtein();
 ```
 
-### Step 2 - Align
+Step 2 - Align
 
 ```java
 Alignment<String> alignment = aligner.align(source, target);
 ```
 
-# Advanced
+## Advanced
 
-### Custom Aligner with expected alignment test
+Custom Aligner with expected alignment test
 
 ```java
 // The source and target lists to be aligned.
@@ -80,16 +80,16 @@ assertEquals(2.0, actual.cost());
 assertEquals(2.0 / 3.0, actual.distance());
 ```
 
-# Performance
+## Performance
 
 Aligning two Integer lists of size 100 takes around 1500ms on my 3.5 GHz Dual-Core Intel Core i7 Macbook Pro.
 Considerably slow. The heap size is also not great and explodes with two lists of size 1000.
 Definitely room for improvement!
 
-# More Use Cases
+## More use cases
 
 Check out the [tests](https://github.com/manzurola/aligner/blob/67618def27d18e0e29e4f07905a4509907b379a3/src/test/java/io/squarebunny/aligner/AlignerTest.java) for more examples. 
 
-# Contributions
+## Contributions
 
 [Contributions](https://github.com/manzurola/aligner/blob/a39d2719394fa258d3193e8258231950a3647920/CONTRIBUTING.md) are welcome.
