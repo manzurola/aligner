@@ -1,13 +1,10 @@
 # Aligner
 
-Determine the minimal Edit path between two lists (source and target). 
+Determine the optimal edit path between two lists.
 
 This is a Java implementation of a parameterizable [Damerau Levenshtein](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) aligner, inspired by [Errant by Chris Bryant](https://github.com/chrisjbryant/errant/blob/master/errant/alignment.py) and [diff_match_patch by Neil Fraser](https://github.com/google/diff-match-patch).
 
-Here are some recommended resources to catch up on Edit Distance in general:
-1. [Speech and Language Processing](https://web.stanford.edu/~jurafsky/slp3/2.pdf)
-2. [Stanford](https://web.stanford.edu/class/cs124/lec/med.pdf)
-3. [Wikipedia](https://en.wikipedia.org/wiki/Edit_distance)
+![maven](https://github.com/manzurola/aligner/actions/workflows/maven.yml/badge.svg)
 
 ## Features
 
@@ -20,30 +17,34 @@ Here are some recommended resources to catch up on Edit Distance in general:
 * Patch class to patch a list of edits into a target list (beta, see tests)
 * And more...
 
-## Use via github packages
+## Installation
 
-Refer to the packages tab on the right for the recommended maven dependency configuraion.
+This library is currenlty available only via Github Packages.
+You will need to [configure maven to work with Github's repo](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry). This includes changing your settings.xml file and generating a Private Access Token in github. Make sure to enable snapshots.
+Once configured, add this to your `pom.xml`:
 
-You will need to [configure maven to work with Github's repo](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry).
-This includes changing your settings.xml file and generating a Private Access Token in github. Make sure to enable snapshots.
+```
+<dependency>
+  <groupId>edu.guym</groupId>
+  <artifactId>aligner</artifactId>
+  <version>1.0-SNAPSHOT</version>
+</dependency>
+```
 
 ## Quick Start
 
-Step 1 - Create an Aligner
-
 ```java
+// create a new damerau levenshtein aligner
 Aligner<String> aligner = Aligner.damerauLevenshtein();
-```
 
-Step 2 - Align
-
-```java
+// align source and target
 Alignment<String> alignment = aligner.align(source, target);
+
+// inspect edits
+alignment.edits().forEach(System.out::println); // inspect edits
 ```
 
-## Advanced
-
-Custom Aligner with expected alignment test
+## Advanced - Custom Aligner
 
 ```java
 // The source and target lists to be aligned.
