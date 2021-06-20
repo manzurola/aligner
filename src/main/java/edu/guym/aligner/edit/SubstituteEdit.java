@@ -20,4 +20,13 @@ public class SubstituteEdit<T> extends Edit<T> {
     protected Operation mergeOperations(Operation other) {
         return Operation.SUBSTITUTE;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Substitute(%s,%s) @%d:%d",
+                source().tokens(),
+                target().tokens(),
+                source().position(),
+                target().position());
+    }
 }

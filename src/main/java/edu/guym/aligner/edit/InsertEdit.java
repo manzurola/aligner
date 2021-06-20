@@ -19,4 +19,9 @@ public class InsertEdit<T> extends Edit<T> {
     protected Operation mergeOperations(Operation other) {
         return operation().equals(other) ? operation() : Operation.SUBSTITUTE;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Insert(%s) @%d:%d", target().tokens(), source().position(), target().position());
+    }
 }

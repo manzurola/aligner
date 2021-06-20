@@ -19,4 +19,13 @@ public class TransposeEdit<T> extends Edit<T> {
     protected Operation mergeOperations(Operation other) {
         return Operation.SUBSTITUTE;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Transpose(%s,%s) @%d:%d",
+                source().tokens(),
+                target().tokens(),
+                source().position(),
+                target().position());
+    }
 }

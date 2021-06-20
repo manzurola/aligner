@@ -148,12 +148,4 @@ public abstract class Edit<T> implements Comparable<Edit<T>> {
         return Objects.hash(operation(), source, target);
     }
 
-    @Override
-    public final String toString() {
-        return "Edit[" + operation() +
-                ", source=" + source +
-                ", target=" + target +
-                ", position= [" + source().position() + ", " + target.position() + "]" +
-                ']';
-    }
 }
