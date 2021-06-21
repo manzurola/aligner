@@ -19,7 +19,7 @@ This is a Java implementation of a parameterizable [Damerau Levenshtein](https:/
 
 ## Installation
 
-This library is currenlty available only via Github Packages.
+This library is currenlty available only on Github Packages.
 You will need to [configure maven to work with Github's repo](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry). This includes changing your settings.xml file and generating a Private Access Token in github. Make sure to enable snapshots.
 Once configured, add this to your `pom.xml`:
 
