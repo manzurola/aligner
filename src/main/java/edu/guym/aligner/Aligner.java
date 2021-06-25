@@ -1,7 +1,7 @@
 package edu.guym.aligner;
 
-import edu.guym.aligner.alignment.Alignment;
-import edu.guym.aligner.impl.DamerauLevenshtein;
+import edu.guym.aligner.edit.Alignment;
+import edu.guym.aligner.algorithm.DamerauLevenshtein;
 import edu.guym.aligner.metrics.*;
 
 import java.util.Comparator;

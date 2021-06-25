@@ -1,16 +1,14 @@
-package edu.guym.aligner.impl;
+package edu.guym.aligner.algorithm;
 
 
 import edu.guym.aligner.Aligner;
-import edu.guym.aligner.alignment.Alignment;
+import edu.guym.aligner.edit.Alignment;
 import edu.guym.aligner.edit.Edit;
 import edu.guym.aligner.edit.Operation;
 import edu.guym.aligner.edit.Segment;
 import edu.guym.aligner.metrics.*;
 
 import java.util.*;
-import java.util.function.BiPredicate;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static edu.guym.aligner.edit.Operation.*;
@@ -54,8 +52,7 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
         int originalLength = sourceArr.length;
         int correctedLength = targetArr.length;
 
-        double[][] costMatrix = initCostMatrix(originalLength, correctedLength);
-        String[][] opMatrix = initOpMatrix(originalLength, correctedLength);
+        Cell[][] matrix = initMatrix(originalLength, correctedLength);
 
         for (int i = 0; i < originalLength; i++) {
             for (int j = 0; j < correctedLength; j++) {
@@ -64,20 +61,20 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
                 T targetToken = targetArr[j];
 
                 if (equalizer.isEqual(sourceToken, targetToken)) {
-                    costMatrix[i + 1][j + 1] = costMatrix[i][j];
-                    opMatrix[i + 1][j + 1] = "M";
+                    matrix[i + 1][j + 1].cost = matrix[i][j].cost;
+                    matrix[i + 1][j + 1].op = EQUAL;
 
                 } else {
-                    double delCost = costMatrix[i][j + 1] + deleteCost.getCost(sourceToken);
-                    double insCost = costMatrix[i + 1][j] + insertCost.getCost(targetToken);
-                    double subCost = costMatrix[i][j] + substituteCost.getCost(sourceToken, targetToken);
+                    double delCost = matrix[i][j + 1].cost + deleteCost.getCost(sourceToken);
+                    double insCost = matrix[i + 1][j].cost + insertCost.getCost(targetToken);
+                    double subCost = matrix[i][j].cost + substituteCost.getCost(sourceToken, targetToken);
 
                     // Transpositions require >=2 tokens
                     // Traverse the diagonal while there is not a Match.
                     double transCost = Double.MAX_VALUE;
                     int k = 1;
                     if (comparator != null) {
-                        while (i - k >= 0 && j - k >= 0 && costMatrix[i - k + 1][j - k + 1] != costMatrix[i - k][j - k]) {
+                        while (i - k >= 0 && j - k >= 0 && matrix[i - k + 1][j - k + 1].cost != matrix[i - k][j - k].cost) {
 
                             T[] sourceSub = Arrays.copyOfRange(sourceArr, i - k, i + 1);
                             T[] targetSub = Arrays.copyOfRange(targetArr, j - k, j + 1);
@@ -85,7 +82,7 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
                             boolean isTransposed = isTransposed(sourceSub, targetSub);
 
                             if (isTransposed) {
-                                transCost = costMatrix[i - k][j - k] + transposeCost.getCost(
+                                transCost = matrix[i - k][j - k].cost + transposeCost.getCost(
                                         sourceSub,
                                         targetSub);
                                 break;
@@ -98,22 +95,23 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
                     // TODO fix this hack - using the index of the list at the switch below
                     List<Double> costs = Arrays.asList(transCost, subCost, insCost, delCost);
                     int minCostIndex = costs.indexOf(costs.stream().min(Double::compareTo).get());
-                    costMatrix[i + 1][j + 1] = costs.get(minCostIndex);
+                    matrix[i + 1][j + 1].cost = costs.get(minCostIndex);
                     switch (minCostIndex) {
                         case 0: {
-                            opMatrix[i + 1][j + 1] = "T" + (k + 1);
+                            matrix[i + 1][j + 1].op = TRANSPOSE;
+                            matrix[i + 1][j + 1].k = k + 1;
                             break;
                         }
                         case 1: {
-                            opMatrix[i + 1][j + 1] = "S";
+                            matrix[i + 1][j + 1].op = SUBSTITUTE;
                             break;
                         }
                         case 2: {
-                            opMatrix[i + 1][j + 1] = "I";
+                            matrix[i + 1][j + 1].op = INSERT;
                             break;
                         }
                         case 3: {
-                            opMatrix[i + 1][j + 1] = "D";
+                            matrix[i + 1][j + 1].op = DELETE;
                             break;
                         }
                     }
@@ -121,10 +119,30 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
             }
         }
 
-        List<Edit<T>> edits = getCheapestAlignmentSequence(opMatrix, source, target);
-        double cost = costMatrix[originalLength][correctedLength];
+        List<Edit<T>> edits = backtrack(matrix, source, target);
+        double cost = matrix[originalLength][correctedLength].cost;
         double length = Math.max(source.size(), target.size());
         return Alignment.of(edits, cost, cost / length);
+    }
+
+    private Cell[][] initMatrix(int m, int n) {
+
+        Cell[][] matrix = new Cell[m + 1][n + 1];
+        for (int i = 0, ilen = matrix.length; i < ilen; i++) {
+            for (int j = 0, jlen = matrix[i].length; j < jlen; j++) {
+                matrix[i][j] = new Cell(0.0);
+            }
+        }
+        // Fill in the edges
+        for (int i = 1; i < m + 1; i++) {
+            matrix[i][0].cost = matrix[i - 1][0].cost + 1;
+            matrix[i][0].op = DELETE;
+        }
+        for (int j = 1; j < n + 1; j++) {
+            matrix[0][j].cost = matrix[0][j-1].cost + 1;
+            matrix[0][j].op = INSERT;
+        }
+        return matrix;
     }
 
     private double[][] initCostMatrix(int m, int n) {
@@ -166,39 +184,37 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
                 .allMatch(index -> comparator.compare(source[index], target[index]) == 0);
     }
 
-    private List<Edit<T>> getCheapestAlignmentSequence(String[][] opMatrix,
-                                                       List<T> source,
-                                                       List<T> target) {
-        int i = opMatrix.length - 1;
-        int j = opMatrix[0].length - 1;
+    private List<Edit<T>> backtrack(Cell[][] matrix,
+                                    List<T> source,
+                                    List<T> target) {
+        int i = matrix.length - 1;
+        int j = matrix[0].length - 1;
         List<Edit<T>> sequence = new ArrayList<>();
         // Work backwards from bottom right until we hit top left
         while (i + j != 0) {
             // Get the edit operation in the current cell
-            String op = opMatrix[i][j];
-            // Matches and substitutions
-            if (Arrays.asList("M", "S").contains(op)) {
-                sequence.add(createEdit(op, i - 1, i, j - 1, j, source, target));
-                i -= 1;
-                j -= 1;
-            }
-            // Deletions
-            else if (op.equals("D")) {
-                sequence.add(createEdit(op, i - 1, i, j, j, source, target));
-                i -= 1;
-            }
-            // Insertions
-            else if (op.equals("I")) {
-                sequence.add(createEdit(op, i, i, j - 1, j, source, target));
-                j -= 1;
-            }
-            // Transpositions
-            else {
-                // Get the size of the transposition (TODO fix this hack)
-                int k = Integer.parseInt(op.substring(1));
-                sequence.add(createEdit(op, i - k, i, j - k, j, source, target));
-                i -= k;
-                j -= k;
+            Operation op = matrix[i][j].op;
+            switch (op) {
+                case EQUAL:
+                case SUBSTITUTE:
+                    sequence.add(createEdit(op, i - 1, i, j - 1, j, source, target));
+                    i -= 1;
+                    j -= 1;
+                    break;
+                case DELETE:
+                    sequence.add(createEdit(op, i - 1, i, j, j, source, target));
+                    i -= 1;
+                    break;
+                case INSERT:
+                    sequence.add(createEdit(op, i, i, j - 1, j, source, target));
+                    j -= 1;
+                    break;
+                case TRANSPOSE:
+                    int k = matrix[i][j].k;
+                    sequence.add(createEdit(op, i - k, i, j - k, j, source, target));
+                    i -= k;
+                    j -= k;
+                    break;
             }
         }
 
@@ -206,7 +222,7 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
         return sequence;
     }
 
-    private Edit<T> createEdit(String op,
+    private Edit<T> createEdit(Operation op,
                                int originalStart,
                                int originalEnd,
                                int correctedStart,
@@ -215,29 +231,25 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
                                List<T> target) {
 
         return Edit.of(
-                resolveOperation(op),
+                op,
                 Segment.of(originalStart, source.subList(originalStart, originalEnd)),
                 Segment.of(correctedStart, target.subList(correctedStart, correctedEnd))
         );
     }
 
-    private Operation resolveOperation(String op) {
-        if (op.equals("M")) {
-            return EQUAL;
+    static class Cell {
+        public double cost;
+        public Operation op;
+        public int k;
+
+        public Cell(double cost) {
+            this.cost = cost;
         }
-        if (op.equals("S")) {
-            return SUBSTITUTE;
+
+        @Override
+        public String toString() {
+            return "{" + cost + "," + op + ", " + k + '}';
         }
-        if (op.equals("I")) {
-            return INSERT;
-        }
-        if (op.equals("D")) {
-            return DELETE;
-        }
-        if (op.startsWith("T")) {
-            return TRANSPOSE;
-        }
-        throw new RuntimeException("Illegal op " + op); // should not come to this
     }
 
 }

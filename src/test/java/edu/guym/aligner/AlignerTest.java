@@ -1,6 +1,6 @@
 package edu.guym.aligner;
 
-import edu.guym.aligner.alignment.Alignment;
+import edu.guym.aligner.edit.Alignment;
 import edu.guym.aligner.edit.Edit;
 import edu.guym.aligner.metrics.Equalizer;
 import edu.guym.aligner.metrics.SubstituteCost;
@@ -11,8 +11,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -113,6 +111,25 @@ public class AlignerTest {
         assertEquals(expected, actual.edits());
         assertEquals(2.0, actual.cost());
         assertEquals(1.0, actual.distance());
+    }
+
+    @Test
+    void alignerBuilder() {
+        Aligner.Builder<String> builder = Aligner.builder();
+        Aligner<String> aligner = builder
+                .setEqualizer(String::equals)
+                .setDeleteCost(source -> 5.0)
+                .build();
+
+        List<String> source = List.of("guy");
+        List<String> target = List.of("");
+        Alignment<String> actual = aligner.align(source, target);
+
+        List<Edit<String>> expected = List.of(
+                Edit.builder().substitute("guy").with("").atPosition(0, 0)
+        );
+
+        assertEquals(expected, actual.edits());
     }
 
     @Test
