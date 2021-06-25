@@ -139,7 +139,7 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
             matrix[i][0].op = DELETE;
         }
         for (int j = 1; j < n + 1; j++) {
-            matrix[0][j].cost = matrix[0][j-1].cost + 1;
+            matrix[0][j].cost = matrix[0][j - 1].cost + 1;
             matrix[0][j].op = INSERT;
         }
         return matrix;
