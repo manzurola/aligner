@@ -1,6 +1,5 @@
 package edu.guym.aligner;
 
-import edu.guym.aligner.edit.Alignment;
 import edu.guym.aligner.edit.Edit;
 import edu.guym.aligner.metrics.Equalizer;
 import edu.guym.aligner.metrics.SubstituteCost;

@@ -2,7 +2,7 @@ package edu.guym.aligner.algorithm;
 
 
 import edu.guym.aligner.Aligner;
-import edu.guym.aligner.edit.Alignment;
+import edu.guym.aligner.Alignment;
 import edu.guym.aligner.edit.Edit;
 import edu.guym.aligner.edit.Operation;
 import edu.guym.aligner.edit.Segment;

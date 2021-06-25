@@ -1,4 +1,8 @@
-package edu.guym.aligner.edit;
+package edu.guym.aligner;
+
+import edu.guym.aligner.edit.Edit;
+import edu.guym.aligner.edit.EqualEdit;
+import edu.guym.aligner.edit.Segment;
 
 import java.util.List;
 import java.util.Objects;
