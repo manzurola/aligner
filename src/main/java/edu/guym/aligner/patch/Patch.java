@@ -1,8 +1,8 @@
 package edu.guym.aligner.patch;
 
 
-import edu.guym.aligner.edit.EditComparator;
 import edu.guym.aligner.edit.Edit;
+import edu.guym.aligner.edit.EditComparator;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
