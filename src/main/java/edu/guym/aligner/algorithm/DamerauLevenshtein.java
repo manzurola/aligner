@@ -32,12 +32,12 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
                               InsertCost<T> insertCost,
                               SubstituteCost<T> substituteCost,
                               TransposeCost<T> transposeCost) {
-        this.equalizer = equalizer;
+        this.equalizer = Objects.requireNonNull(equalizer);
         this.comparator = comparator;
-        this.deleteCost = deleteCost;
-        this.insertCost = insertCost;
-        this.substituteCost = substituteCost;
-        this.transposeCost = transposeCost;
+        this.deleteCost = Objects.requireNonNull(deleteCost);
+        this.insertCost = Objects.requireNonNull(insertCost);
+        this.substituteCost = Objects.requireNonNull(substituteCost);
+        this.transposeCost = Objects.requireNonNull(transposeCost);
     }
 
     @Override
