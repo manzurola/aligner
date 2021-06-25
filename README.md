@@ -53,13 +53,13 @@ List<Integer> source = List.of(1, 3, 3);
 List<Integer> target = List.of(1, 2, 3);
 
 // The equality operation is used to determine whether two elements are equal
-BiPredicate<Integer, Integer> equalizer = Integer::equals;
+Equalizer<Integer> equalizer = Integer::equals;
 
 // The comparator is used to sort and compare two candidate lists for transposition
 Comparator<Integer> comparator = Integer::compareTo;
 
 // This cost function disables substitution for elements with values (3,2) by returning a Double.MAX_VALUE when matched
-BiFunction<Integer, Integer, Double> substituteCost = (s, t) -> s == 3 && t == 2 ? Double.MAX_VALUE : 1.0;
+SubstituteCost<Integer> substituteCost = (s, t) -> s == 3 && t == 2 ? Double.MAX_VALUE : 1.0;
 
 // A custom damerau levenshtein aligner
 Aligner<Integer> aligner = Aligner.damerauLevenshtein(equalizer, comparator, substituteCost);
