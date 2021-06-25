@@ -6,6 +6,7 @@ import edu.guym.aligner.alignment.Alignment;
 import edu.guym.aligner.edit.Edit;
 import edu.guym.aligner.edit.Operation;
 import edu.guym.aligner.edit.Segment;
+import edu.guym.aligner.metrics.*;
 
 import java.util.*;
 import java.util.function.BiPredicate;
@@ -20,16 +21,25 @@ import static edu.guym.aligner.edit.Operation.*;
  */
 public class DamerauLevenshtein<T> implements Aligner<T> {
 
-    private final CostFunction<T> costFunction;
-    private final BiPredicate<T, T> equalizer;
+    private final Equalizer<T> equalizer;
     private final Comparator<T> comparator;
+    private final DeleteCost<T> deleteCost;
+    private final InsertCost<T> insertCost;
+    private final SubstituteCost<T> substituteCost;
+    private final TransposeCost<T> transposeCost;
 
-    public DamerauLevenshtein(CostFunction<T> costFunction,
-                              BiPredicate<T, T> equalizer,
-                              Comparator<T> comparator) {
-        this.costFunction = Objects.requireNonNull(costFunction);
-        this.equalizer = Objects.requireNonNull(equalizer);
+    public DamerauLevenshtein(Equalizer<T> equalizer,
+                              Comparator<T> comparator,
+                              DeleteCost<T> deleteCost,
+                              InsertCost<T> insertCost,
+                              SubstituteCost<T> substituteCost,
+                              TransposeCost<T> transposeCost) {
+        this.equalizer = equalizer;
         this.comparator = comparator;
+        this.deleteCost = deleteCost;
+        this.insertCost = insertCost;
+        this.substituteCost = substituteCost;
+        this.transposeCost = transposeCost;
     }
 
     @Override
@@ -53,14 +63,14 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
                 T sourceToken = sourceArr[i];
                 T targetToken = targetArr[j];
 
-                if (equalizer.test(sourceToken, targetToken)) {
+                if (equalizer.isEqual(sourceToken, targetToken)) {
                     costMatrix[i + 1][j + 1] = costMatrix[i][j];
                     opMatrix[i + 1][j + 1] = "M";
 
                 } else {
-                    double delCost = costMatrix[i][j + 1] + costFunction.deleteCost(sourceToken);
-                    double insCost = costMatrix[i + 1][j] + costFunction.insertCost(targetToken);
-                    double subCost = costMatrix[i][j] + costFunction.substituteCost(sourceToken, targetToken);
+                    double delCost = costMatrix[i][j + 1] + deleteCost.getCost(sourceToken);
+                    double insCost = costMatrix[i + 1][j] + insertCost.getCost(targetToken);
+                    double subCost = costMatrix[i][j] + substituteCost.getCost(sourceToken, targetToken);
 
                     // Transpositions require >=2 tokens
                     // Traverse the diagonal while there is not a Match.
@@ -75,7 +85,7 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
                             boolean isTransposed = isTransposed(sourceSub, targetSub);
 
                             if (isTransposed) {
-                                transCost = costMatrix[i - k][j - k] + costFunction.transposeCost(
+                                transCost = costMatrix[i - k][j - k] + transposeCost.getCost(
                                         sourceSub,
                                         targetSub);
                                 break;
