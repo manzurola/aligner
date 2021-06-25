@@ -83,9 +83,8 @@ assertEquals(2.0 / 3.0, actual.distance());
 
 ## Performance
 
-Aligning two Integer lists of size 100 takes around 1500ms on my 3.5 GHz Dual-Core Intel Core i7 Macbook Pro.
-Considerably slow. The heap size is also not great and explodes with two lists of size 1000.
-Definitely room for improvement!
+Aligning two Integer lists of size 100 takes around 1200ms on my 3.5 GHz Dual-Core Intel Core i7 Macbook Pro.
+With levenshtein only (no traspositions) it takes around 70 ms.
 
 ## More use cases
 
