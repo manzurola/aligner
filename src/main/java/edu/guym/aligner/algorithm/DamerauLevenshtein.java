@@ -145,36 +145,6 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
         return matrix;
     }
 
-    private double[][] initCostMatrix(int m, int n) {
-        double[][] costMatrix = new double[m + 1][n + 1];
-        for (double[] matrix : costMatrix) {
-            Arrays.fill(matrix, 0.0);
-        }
-        // Fill in the edges
-        for (int i = 1; i < m + 1; i++) {
-            costMatrix[i][0] = costMatrix[i - 1][0] + 1;
-        }
-        for (int j = 1; j < n + 1; j++) {
-            costMatrix[0][j] = costMatrix[0][j - 1] + 1;
-        }
-        return costMatrix;
-    }
-
-    private String[][] initOpMatrix(int m, int n) {
-        String[][] opMatrix = new String[m + 1][n + 1];
-        for (String[] matrix : opMatrix) {
-            Arrays.fill(matrix, "0");
-        }
-        // Fill in the edges
-        for (int i = 1; i < m + 1; i++) {
-            opMatrix[i][0] = "D";
-        }
-        for (int j = 1; j < n + 1; j++) {
-            opMatrix[0][j] = "I";
-        }
-        return opMatrix;
-    }
-
     private boolean isTransposed(T[] source,
                                  T[] target) {
         Arrays.sort(source, comparator);
