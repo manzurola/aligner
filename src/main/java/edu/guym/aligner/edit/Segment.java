@@ -103,9 +103,6 @@ public final class Segment<T> implements Comparable<Segment<T>> {
      * <p>
      * This is equivalent of running {@code mapWithIndex(items::get)};
      *
-     * @param items
-     * @param <E>
-     * @return
      */
     @Deprecated
     public final <E> Segment<E> select(List<E> items) {

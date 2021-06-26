@@ -147,12 +147,37 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
 
     private boolean isTransposed(T[] source,
                                  T[] target) {
+        if (source.length == 2) {
+            //most common scenario, compare permutations without sort
+            T source1 = source[0];
+            T source2 = source[1];
+            T target1 = target[0];
+            T target2 = target[1];
+            boolean identical = comparator.compare(source1, target1) == 0 && comparator.compare(source2, target2) == 0;
+            boolean reversed = comparator.compare(source1, target2) == 0 && comparator.compare(source2, target1) == 0;
+            return identical || reversed;
+        }
+
         Arrays.sort(source, comparator);
         Arrays.sort(target, comparator);
-        return IntStream
-                .range(0, source.length)
-                .allMatch(index -> comparator.compare(source[index], target[index]) == 0);
+        boolean match = false;
+        for (int i = 0; i < source.length; i++) {
+            T s = source[i];
+            T t = target[i];
+            match = comparator.compare(s, t) == 0;
+            if (!match) break;
+        }
+        return match;
     }
+
+//    private boolean isTransposed(T[] source,
+//                                 T[] target) {
+//        Arrays.sort(source, comparator);
+//        Arrays.sort(target, comparator);
+//        return IntStream
+//                .range(0, source.length)
+//                .allMatch(index -> comparator.compare(source[index], target[index]) == 0);
+//    }
 
     private List<Edit<T>> backtrack(Cell[][] matrix,
                                     List<T> source,

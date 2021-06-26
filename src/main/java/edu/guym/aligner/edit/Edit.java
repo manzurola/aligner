@@ -8,6 +8,21 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Base class for Edit objects.
+ * An edit represents the difference, or delta, between two lists of the generic argument T.
+ * This difference is expressed by the operation of the edit, and two segments that hold the source and target tokens.
+ * There are a total of 5 types of edits:
+ * <ol>
+ * <li>Delete - represents tokens that should be deleted from the source list. Should not have any target tokens.
+ * <li>Insert - represents tokens that are missing from source. The missing tokens are referenced by the target segment.
+ * <li>Substitute - represents source tokens that should be replaced with some target tokens.
+ * <li>Transpose - represents source tokens that need to be transposed (changed by order) to match the correct target segment.
+ * <li>Equal - the source and target segments are identical, no change.
+ * </ol>
+ *
+ * @param <T>
+ */
 public abstract class Edit<T> implements Comparable<Edit<T>> {
 
     private final Segment<T> source;
@@ -19,6 +34,9 @@ public abstract class Edit<T> implements Comparable<Edit<T>> {
         this.target = Objects.requireNonNull(target);
     }
 
+    /**
+     * Freely construct an Edit given the operation and segments.
+     */
     public static <T> Edit<T> of(Operation operation,
                                  Segment<T> source,
                                  Segment<T> target) {
@@ -117,6 +135,9 @@ public abstract class Edit<T> implements Comparable<Edit<T>> {
         return Edit.of(operation, source, target);
     }
 
+    /**
+     * Does this edit precede {@code other} in the natural sort order and is also adjacent to it?
+     */
     public final boolean isLeftSiblingOf(Edit<T> other) {
         Segment<T> leftSource = this.source;
         Segment<T> leftTarget = this.target;
