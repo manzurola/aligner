@@ -25,7 +25,7 @@ Once configured, add this to your `pom.xml`:
 
 ```
 <dependency>
-  <groupId>edu.guym</groupId>
+  <groupId>io.languagetoys</groupId>
   <artifactId>aligner</artifactId>
   <version>1.0-SNAPSHOT</version>
 </dependency>
