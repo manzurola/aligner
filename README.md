@@ -1,5 +1,4 @@
-# Aligner
-
+# Aligner 🤖
 Determine the optimal edit path between two lists.
 
 This is a Java implementation of a parameterizable [Damerau Levenshtein](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) aligner, inspired by [Errant by Chris Bryant](https://github.com/chrisjbryant/errant/blob/master/errant/alignment.py) and [diff_match_patch by Neil Fraser](https://github.com/google/diff-match-patch).
