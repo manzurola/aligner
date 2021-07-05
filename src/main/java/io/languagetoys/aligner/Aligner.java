@@ -1,6 +1,5 @@
 package io.languagetoys.aligner;
 
-import io.languagetoys.aligner.algorithm.DamerauLevenshtein;
 import io.languagetoys.aligner.metrics.*;
 
 import java.util.Comparator;
@@ -30,7 +29,7 @@ public interface Aligner<T> {
      * Get a new levenshtein aligner using {@code T::equals} as the equalizer.
      */
     static <T> Aligner<T> levenshtein() {
-        return new Builder<T>()
+        return Aligner.<T>builder()
                 .setEqualizer(T::equals)
                 .build();
     }
@@ -41,7 +40,7 @@ public interface Aligner<T> {
      * @param equalizer a predicate to determine if two items are equal.
      */
     static <T> Aligner<T> levenshtein(Equalizer<T> equalizer) {
-        return new Builder<T>()
+        return Aligner.<T>builder()
                 .setEqualizer(equalizer)
                 .build();
     }
@@ -54,7 +53,7 @@ public interface Aligner<T> {
      */
     static <T> Aligner<T> levenshtein(Equalizer<T> equalizer,
                                       SubstituteCost<T> substituteCost) {
-        return new Builder<T>()
+        return Aligner.<T>builder()
                 .setEqualizer(equalizer)
                 .setSubstituteCost(substituteCost)
                 .build();
@@ -66,7 +65,7 @@ public interface Aligner<T> {
      * Param T must extend {@link Comparable}.
      */
     static <T extends Comparable<T>> Aligner<T> damerauLevenshtein() {
-        return new Builder<T>()
+        return Aligner.<T>builder()
                 .setEqualizer(T::equals)
                 .setComparator(Comparator.naturalOrder())
                 .build();
@@ -80,7 +79,7 @@ public interface Aligner<T> {
      * @param equalizer a predicate to determine if two items are equal.
      */
     static <T extends Comparable<T>> Aligner<T> damerauLevenshtein(Equalizer<T> equalizer) {
-        return new Builder<T>()
+        return Aligner.<T>builder()
                 .setEqualizer(equalizer)
                 .setComparator(Comparator.naturalOrder())
                 .build();
@@ -94,7 +93,7 @@ public interface Aligner<T> {
      */
     static <T> Aligner<T> damerauLevenshtein(Equalizer<T> equalizer,
                                              Comparator<T> comparator) {
-        return new Builder<T>()
+        return Aligner.<T>builder()
                 .setEqualizer(equalizer)
                 .setComparator(comparator)
                 .build();
@@ -110,7 +109,7 @@ public interface Aligner<T> {
     static <T> Aligner<T> damerauLevenshtein(Equalizer<T> equalizer,
                                              Comparator<T> comparator,
                                              SubstituteCost<T> substituteCost) {
-        return new Builder<T>()
+        return Aligner.<T>builder()
                 .setEqualizer(equalizer)
                 .setComparator(comparator)
                 .setSubstituteCost(substituteCost)
@@ -122,58 +121,29 @@ public interface Aligner<T> {
      * The builder is instantiated with default DL values for costs, an equalizer the uses T::equals and a null comparator (no transpose).
      */
     static <T> Aligner.Builder<T> builder() {
-        return new Builder<>();
+        return new BuilderImpl<T>()
+                .setEqualizer(T::equals)
+                .setDeleteCost((s) -> 1.0)
+                .setInsertCost((s) -> 1.0)
+                .setSubstituteCost((s, t) -> 1.0)
+                .setTransposeCost((s, t) -> s.length - 1.0);
     }
 
-    final class Builder<T> {
+    interface Builder<T> {
+        Builder<T> setDeleteCost(DeleteCost<T> deleteCost);
 
-        private Equalizer<T> equalizer = T::equals;
-        private Comparator<T> comparator = null;
+        Builder<T> setInsertCost(InsertCost<T> insertCost);
 
-        private DeleteCost<T> deleteCost = (s) -> 1.0;
-        private InsertCost<T> insertCost = (t) -> 1.0;
-        private SubstituteCost<T> substituteCost = (s, t) -> 1.0;
-        private TransposeCost<T> transposeCost = (s, t) -> s.length - 1.0;
+        Builder<T> setSubstituteCost(SubstituteCost<T> substituteCost);
 
-        public final Builder<T> setDeleteCost(DeleteCost<T> deleteCost) {
-            this.deleteCost = deleteCost;
-            return this;
-        }
+        Builder<T> setTransposeCost(TransposeCost<T> transposeCost);
 
-        public final Builder<T> setInsertCost(InsertCost<T> insertCost) {
-            this.insertCost = insertCost;
-            return this;
-        }
+        Builder<T> setEqualizer(Equalizer<T> equalizer);
 
-        public final Builder<T> setSubstituteCost(SubstituteCost<T> substituteCost) {
-            this.substituteCost = substituteCost;
-            return this;
-        }
+        Builder<T> setComparator(Comparator<T> comparator);
 
-        public final Builder<T> setTransposeCost(TransposeCost<T> transposeCost) {
-            this.transposeCost = transposeCost;
-            return this;
-        }
-
-        public Builder<T> setEqualizer(Equalizer<T> equalizer) {
-            this.equalizer = equalizer;
-            return this;
-        }
-
-        public final Builder<T> setComparator(Comparator<T> comparator) {
-            this.comparator = comparator;
-            return this;
-        }
-
-        public final Aligner<T> build() {
-            return new DamerauLevenshtein<>(
-                    equalizer,
-                    comparator,
-                    deleteCost,
-                    insertCost,
-                    substituteCost,
-                    transposeCost
-            );
-        }
+        Aligner<T> build();
     }
+
+
 }

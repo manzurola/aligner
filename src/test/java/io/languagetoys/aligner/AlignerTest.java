@@ -71,6 +71,7 @@ public class AlignerTest {
         assertEquals(expected, actual.edits());
         assertEquals(2.0, actual.cost());
         assertEquals(2.0 / 3.0, actual.distance());
+
     }
 
     @Test

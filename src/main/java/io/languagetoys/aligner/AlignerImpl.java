@@ -1,8 +1,6 @@
-package io.languagetoys.aligner.algorithm;
+package io.languagetoys.aligner;
 
 
-import io.languagetoys.aligner.Aligner;
-import io.languagetoys.aligner.Alignment;
 import io.languagetoys.aligner.edit.Edit;
 import io.languagetoys.aligner.edit.Operation;
 import io.languagetoys.aligner.edit.Segment;
@@ -16,7 +14,7 @@ import static io.languagetoys.aligner.edit.Operation.*;
  * This implementation is a port of <a href="https://github.com/chrisjbryant/errant/blob/master/errant/alignment.py">
  * https://github.com/chrisjbryant/errant/blob/master/errant/alignment.py</a>.
  */
-public class DamerauLevenshtein<T> implements Aligner<T> {
+final class AlignerImpl<T> implements Aligner<T> {
 
     private final Equalizer<T> equalizer;
     private final Comparator<T> comparator;
@@ -25,12 +23,12 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
     private final SubstituteCost<T> substituteCost;
     private final TransposeCost<T> transposeCost;
 
-    public DamerauLevenshtein(Equalizer<T> equalizer,
-                              Comparator<T> comparator,
-                              DeleteCost<T> deleteCost,
-                              InsertCost<T> insertCost,
-                              SubstituteCost<T> substituteCost,
-                              TransposeCost<T> transposeCost) {
+    public AlignerImpl(Equalizer<T> equalizer,
+                       Comparator<T> comparator,
+                       DeleteCost<T> deleteCost,
+                       InsertCost<T> insertCost,
+                       SubstituteCost<T> substituteCost,
+                       TransposeCost<T> transposeCost) {
         this.equalizer = Objects.requireNonNull(equalizer);
         this.comparator = comparator;
         this.deleteCost = Objects.requireNonNull(deleteCost);
@@ -40,7 +38,7 @@ public class DamerauLevenshtein<T> implements Aligner<T> {
     }
 
     @Override
-    public Alignment<T> align(List<T> source,
+    public final Alignment<T> align(List<T> source,
                               List<T> target) {
         Objects.requireNonNull(source);
         Objects.requireNonNull(target);
