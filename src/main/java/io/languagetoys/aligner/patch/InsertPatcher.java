@@ -16,8 +16,8 @@ public class InsertPatcher<T> extends EditPatcher<T> {
     public void verify(List<T> target) throws IllegalStateException {
         Optional.of(target)
                 .filter(ts -> getEdit().source().position() <= target.size())
-                .orElseThrow(() -> new IllegalStateException("Incorrect patch for getEdit: "
-                        + "getEdit original position > target size"));
+                .orElseThrow(() -> new IllegalStateException("Incorrect patch for getEdit: " +
+                                                             "getEdit original position > target size"));
     }
 
     @Override

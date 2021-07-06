@@ -85,8 +85,8 @@ public final class Alignment<T> {
         if (o == null || getClass() != o.getClass()) return false;
         Alignment<?> alignment = (Alignment<?>) o;
         return Double.compare(alignment.cost, cost) == 0 &&
-                Double.compare(alignment.distance, distance) == 0 &&
-                edits.equals(alignment.edits);
+               Double.compare(alignment.distance, distance) == 0 &&
+               edits.equals(alignment.edits);
     }
 
     @Override
@@ -97,10 +97,10 @@ public final class Alignment<T> {
     @Override
     public final String toString() {
         return "Alignment{" +
-                "edits=" + edits +
-                ", cost=" + cost +
-                ", distance=" + distance +
-                '}';
+               "edits=" + edits +
+               ", cost=" + cost +
+               ", distance=" + distance +
+               '}';
     }
 
 

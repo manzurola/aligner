@@ -39,7 +39,7 @@ final class AlignerImpl<T> implements Aligner<T> {
 
     @Override
     public final Alignment<T> align(List<T> source,
-                              List<T> target) {
+                                    List<T> target) {
         Objects.requireNonNull(source);
         Objects.requireNonNull(target);
 
@@ -71,7 +71,9 @@ final class AlignerImpl<T> implements Aligner<T> {
                     double transCost = Double.MAX_VALUE;
                     int k = 1;
                     if (comparator != null) {
-                        while (i - k >= 0 && j - k >= 0 && matrix[i - k + 1][j - k + 1].cost != matrix[i - k][j - k].cost) {
+                        while (i - k >= 0 &&
+                               j - k >= 0 &&
+                               matrix[i - k + 1][j - k + 1].cost != matrix[i - k][j - k].cost) {
 
                             T[] sourceSub = Arrays.copyOfRange(sourceArr, i - k, i + 1);
                             T[] targetSub = Arrays.copyOfRange(targetArr, j - k, j + 1);
@@ -162,19 +164,12 @@ final class AlignerImpl<T> implements Aligner<T> {
             T s = source[i];
             T t = target[i];
             match = comparator.compare(s, t) == 0;
-            if (!match) break;
+            if (!match) {
+                break;
+            }
         }
         return match;
     }
-
-//    private boolean isTransposed(T[] source,
-//                                 T[] target) {
-//        Arrays.sort(source, comparator);
-//        Arrays.sort(target, comparator);
-//        return IntStream
-//                .range(0, source.length)
-//                .allMatch(index -> comparator.compare(source[index], target[index]) == 0);
-//    }
 
     private List<Edit<T>> backtrack(Cell[][] matrix,
                                     List<T> source,

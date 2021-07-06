@@ -23,9 +23,9 @@ public class TransposeEdit<T> extends Edit<T> {
     @Override
     public String toString() {
         return String.format("Transpose(%s,%s) @%d:%d",
-                source().tokens(),
-                target().tokens(),
-                source().position(),
-                target().position());
+                             source().tokens(),
+                             target().tokens(),
+                             source().position(),
+                             target().position());
     }
 }
