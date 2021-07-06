@@ -6,16 +6,16 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Base interface for aligner implementations.
- * <br/>
- * The factory methods support two different aligners - Levenshtein and Damerau Levenshtein, where levenshtein is basically Damerau without transpositions.
- * <br/>
- * <br/>
- * The aligner can be parameterized with the following:
+ * Base interface for aligner implementations. <br/> The factory methods support two different aligners - Levenshtein
+ * and Damerau Levenshtein, where levenshtein is basically Damerau without transpositions. <br/> <br/> The aligner can
+ * be parameterized with the following:
  * <ol>
- * <li>A custom equality function - determines if two items are equal. If none is supplied, the object's {@code equals} method is used.</li>
- * <li>A custom comparator function - determines if two sub lists are transposable. If you are using a Levenshtein aligner than transposition is not supported.
- * If using Damerau and no comparator is supplied, a natural order comparator is used and you must use a generic type that implements {@link Comparable}.</li>
+ * <li>A custom equality function - determines if two items are equal. If none is supplied, the object's {@code
+ * equals} method is used.</li>
+ * <li>A custom comparator function - determines if two sub lists are transposable. If you are using a Levenshtein
+ * aligner than transposition is not supported.
+ * If using Damerau and no comparator is supplied, a natural order comparator is used and you must use a generic type
+ * that implements {@link Comparable}.</li>
  * <li>A custom substitution cost function. If none is supplied, the default cost is 1.</li>
  * </ol>
  *
@@ -61,8 +61,7 @@ public interface Aligner<T> {
 
     /**
      * Get a new damerau-levenshtein aligner using {@code T::equals} as the equalizer and a natural order comparator.
-     * <br/>
-     * Param T must extend {@link Comparable}.
+     * <br/> Param T must extend {@link Comparable}.
      */
     static <T extends Comparable<T>> Aligner<T> damerauLevenshtein() {
         return Aligner.<T>builder()
@@ -72,9 +71,8 @@ public interface Aligner<T> {
     }
 
     /**
-     * Get a new damerau-levenshtein aligner with a custom {@code equals} delegate function.
-     * <br/>
-     * Param T must extend {@link Comparable}.
+     * Get a new damerau-levenshtein aligner with a custom {@code equals} delegate function. <br/> Param T must extend
+     * {@link Comparable}.
      *
      * @param equalizer a predicate to determine if two items are equal.
      */
@@ -100,7 +98,8 @@ public interface Aligner<T> {
     }
 
     /**
-     * Get a new damerau-levenshtein aligner with a custom {@code equals} delegate function, comparator and substitution cost function.
+     * Get a new damerau-levenshtein aligner with a custom {@code equals} delegate function, comparator and substitution
+     * cost function.
      *
      * @param equalizer      a predicate to determine if two items are equal.
      * @param comparator     a {@link Comparator} used to determine if two lists are transposable.
@@ -117,8 +116,9 @@ public interface Aligner<T> {
     }
 
     /**
-     * Get a new builder to create a custom aligner based on the damerau levenshtein algorithm.
-     * The builder is instantiated with default DL values for costs, an equalizer the uses T::equals and a null comparator (no transpose).
+     * Get a new builder to create a custom aligner based on the damerau levenshtein algorithm. The builder is
+     * instantiated with default DL values for costs, an equalizer the uses T::equals and a null comparator (no
+     * transpose).
      */
     static <T> Aligner.Builder<T> builder() {
         return new BuilderImpl<T>()

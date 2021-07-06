@@ -90,6 +90,7 @@ public final class Segment<T> implements Comparable<Segment<T>> {
 
     /**
      * Get the indices that this segment references.
+     *
      * @return an IntStream of range {@code (position, position + size())}.
      */
     public final IntStream indices() {
@@ -97,12 +98,11 @@ public final class Segment<T> implements Comparable<Segment<T>> {
     }
 
     /**
-     * Selects the current segment from the supplied list, based on the position of this segment.
-     * For example, given a list of length 10 and a segment of size 4 starting from position 3,
-     * the returned segment will contain elements 3,4,5,6 from the supplied list.
+     * Selects the current segment from the supplied list, based on the position of this segment. For example, given a
+     * list of length 10 and a segment of size 4 starting from position 3, the returned segment will contain elements
+     * 3,4,5,6 from the supplied list.
      * <p>
      * This is equivalent of running {@code mapWithIndex(items::get)};
-     *
      */
     @Deprecated
     public final <E> Segment<E> select(List<E> items) {
@@ -111,6 +111,7 @@ public final class Segment<T> implements Comparable<Segment<T>> {
 
     /**
      * Appends {@code items} to the end of the segment.
+     *
      * @return a new segment with new tokens as tokens() + items.
      */
     public final Segment<T> append(List<T> items) {
@@ -136,7 +137,7 @@ public final class Segment<T> implements Comparable<Segment<T>> {
         if (o == null || getClass() != o.getClass()) return false;
         Segment<?> segment = (Segment<?>) o;
         return position == segment.position &&
-                tokens.equals(segment.tokens);
+               tokens.equals(segment.tokens);
     }
 
     @Override
@@ -147,8 +148,8 @@ public final class Segment<T> implements Comparable<Segment<T>> {
     @Override
     public final String toString() {
         return "Segment{" +
-                "position=" + position +
-                ", tokens=" + tokens +
-                '}';
+               "position=" + position +
+               ", tokens=" + tokens +
+               '}';
     }
 }

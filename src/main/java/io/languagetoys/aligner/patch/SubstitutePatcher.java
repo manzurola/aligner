@@ -50,7 +50,7 @@ public class SubstitutePatcher<T> extends EditPatcher<T> {
 //        getEdit().source().verify(target);
         if (getEdit().source().position() > target.size()) {
             throw new IllegalStateException("Incorrect patch for getEdit: "
-                    + "getEdit original position > target size");
+                                            + "getEdit original position > target size");
         }
     }
 }

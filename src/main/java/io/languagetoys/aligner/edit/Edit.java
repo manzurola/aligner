@@ -9,15 +9,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Base class for Edit objects.
- * An edit represents the difference, or delta, between two lists of the generic argument T.
- * This difference is expressed by the operation of the edit, and two segments that hold the source and target tokens.
- * There are a total of 5 types of edits:
+ * Base class for Edit objects. An edit represents the difference, or delta, between two lists of the generic argument
+ * T. This difference is expressed by the operation of the edit, and two segments that hold the source and target
+ * tokens. There are a total of 5 types of edits:
  * <ol>
  * <li>Delete - represents tokens that should be deleted from the source list. Should not have any target tokens.
  * <li>Insert - represents tokens that are missing from source. The missing tokens are referenced by the target segment.
  * <li>Substitute - represents source tokens that should be replaced with some target tokens.
- * <li>Transpose - represents source tokens that need to be transposed (changed by order) to match the correct target segment.
+ * <li>Transpose - represents source tokens that need to be transposed (changed by order) to match the correct target
+ * segment.
  * <li>Equal - the source and target segments are identical, no change.
  * </ol>
  *
@@ -102,12 +102,14 @@ public abstract class Edit<T> implements Comparable<Edit<T>> {
      * <p>
      * The edits must be adjacent for the merge to be successful.
      * <p>
-     * To test adjacency we first sort the edits, and test if left {@link #isLeftSiblingOf(Edit)} right. if the test fails an exception is thrown.
+     * To test adjacency we first sort the edits, and test if left {@link #isLeftSiblingOf(Edit)} right. if the test
+     * fails an exception is thrown.
      * <p>
-     * The merged edit will contain all elements but may have a different operation.
-     * If both edits are equal, this is returned.
+     * The merged edit will contain all elements but may have a different operation. If both edits are equal, this is
+     * returned.
      * <p>
      * This method is symmetrical, i.e. given editA and editB, editA.mergeWith(editB) equals editB.mergeWith(editA).
+     *
      * @param other
      * @return the merged edit
      */
@@ -141,10 +143,8 @@ public abstract class Edit<T> implements Comparable<Edit<T>> {
     public final boolean isLeftSiblingOf(Edit<T> other) {
         Segment<T> leftSource = this.source;
         Segment<T> leftTarget = this.target;
-        Segment<T> rightSource = other.source;
-        Segment<T> rightTarget = other.target;
-        return leftSource.position() + leftSource.size() == rightSource.position() &&
-                leftTarget.position() + leftTarget.size() == rightTarget.position();
+        return leftSource.position() + leftSource.size() == other.source.position() &&
+               leftTarget.position() + leftTarget.size() == other.target.position();
     }
 
     protected abstract Operation mergeOperations(Operation other);
@@ -160,8 +160,8 @@ public abstract class Edit<T> implements Comparable<Edit<T>> {
         if (o == null || getClass() != o.getClass()) return false;
         Edit<?> that = (Edit<?>) o;
         return operation() == that.operation() &&
-                Objects.equals(source, that.source) &&
-                Objects.equals(target, that.target);
+               Objects.equals(source, that.source) &&
+               Objects.equals(target, that.target);
     }
 
     @Override
