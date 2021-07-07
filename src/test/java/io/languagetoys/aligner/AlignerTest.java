@@ -1,6 +1,8 @@
 package io.languagetoys.aligner;
 
 import io.languagetoys.aligner.edit.Edit;
+import io.languagetoys.aligner.edit.Operation;
+import io.languagetoys.aligner.edit.Segment;
 import io.languagetoys.aligner.metrics.Equalizer;
 import io.languagetoys.aligner.metrics.SubstituteCost;
 import org.junit.jupiter.api.Disabled;
@@ -35,21 +37,21 @@ public class AlignerTest {
         // A custom damerau levenshtein aligner
         Aligner<Integer> aligner = Aligner.damerauLevenshtein(equalizer, comparator, substituteCost);
 
-        // The expected list of edits
-        List<Edit<Integer>> expected = List.of(
-                Edit.builder().equal(1).and(1).atPosition(0, 0),
-                Edit.builder().delete(3).atPosition(1, 1),
-                Edit.builder().insert(2).atPosition(2, 1),
-                Edit.builder().equal(3).and(3).atPosition(2, 2)
-        );
-
         // Align the two lists
-        Alignment<Integer> actual = aligner.align(source, target);
+        Alignment<Integer> alignment = aligner.align(source, target);
 
-        // Assert expected results
-        assertEquals(expected, actual.edits());
-        assertEquals(2.0, actual.cost());
-        assertEquals(2.0 / 3.0, actual.distance());
+        // Get the cost and distance of the alignment
+        double cost = alignment.cost();
+        double distance = alignment.distance();
+        System.out.printf("Cost: %s, distance: %s%n", cost, distance);
+
+        // Inspect individual edits
+        for (Edit<Integer> edit : alignment.edits()) {
+            Operation op = edit.operation();
+            Segment<Integer> s = edit.source();
+            Segment<Integer> t = edit.target();
+            System.out.printf("Operation: %s, source: %s, target: %s%n", op, s, t);
+        }
     }
 
 
