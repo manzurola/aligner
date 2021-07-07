@@ -88,4 +88,4 @@ If you want to contact me you can reach me at [guy.manzurola@gmail.com](guy.manz
 
 ## License
         
-This project uses the following license: [MIT](https://github.com/LanguageToys/aligner/blob/555fd35e842feb8d899d7197a1965ea01bc74c95/LICENSE)
+This project uses the following license: [MIT](https://github.com/LanguageToys/aligner/blob/555fd35e842feb8d899d7197a1965ea01bc74c95/LICENSE).
