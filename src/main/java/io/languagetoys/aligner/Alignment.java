@@ -44,18 +44,30 @@ public final class Alignment<T> {
         edits.forEach(consumer);
     }
 
+    /**
+     * The total cost of operations
+     */
     public final double cost() {
         return cost;
     }
 
+    /**
+     * The normalized cost [0, 1]
+     */
     public final double distance() {
         return distance;
     }
 
+    /**
+     * The inverse of {@link #distance()}
+     */
     public final double similarity() {
         return 1 - distance;
     }
 
+    /**
+     * The normalized cost ratio, defined as (maxLength - cost) / maxLength
+     */
     public final double ratio() {
         int lensum = Math.max(source().size(), target().size());
         return (lensum - cost()) / lensum;
