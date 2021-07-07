@@ -1,90 +1,91 @@
 # Aligner 🤖
 
-Determine the optimal edit path between two lists.
+Aligner computes a backtrace of the minimum edit distance using the [Damerau Levenshtein](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) algorithm.
 
-This is a Java implementation of a
-parameterizable [Damerau Levenshtein](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) aligner,
-inspired by [Errant by Chris Bryant](https://github.com/chrisjbryant/errant/blob/master/errant/alignment.py)
+Inspired by [Errant by Chris Bryant](https://github.com/chrisjbryant/errant/blob/master/errant/alignment.py)
 and [diff_match_patch by Neil Fraser](https://github.com/google/diff-match-patch).
 
 ![maven](https://github.com/manzurola/aligner/actions/workflows/maven.yml/badge.svg)
 
-## Features
+## Prerequisits
 
-* Supports 5 Edit operations - Insert, Delete, Substitute, Transpose and Equal
-* Variable length transposition edit
-* Custom Equality function
-* Custom Comparator to determine transposition
-* Edit Ratio, Distance and Cost given on an Alignment result
-* Powerfull Edit class supports merge operations and functional stream like operations
-* Patch class to patch a list of edits into a target list (beta, see tests)
-* And more...
+This library uses Java 11.
 
-## Installation
+## Installing Aligner
 
-Available via [github packages](https://github.com/manzurola/aligner/packages/843031).
+Available as a Maven dependency via [GitHub Packages](https://github.com/orgs/LanguageToys/packages?repo_name=aligner).  
 
-## Quick Start
+See GitHub documentation on [installing a package](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#installing-a-package).
+
+## Using Aligner
+
+To use Aligner in code, follow these steps:
 
 ```java
-// Create a new damerau levenshtein aligner
+// Prepare source and target lists to be aligned
+List<Integer> source = List.of(1, 3, 3);
+List<Integer> target = List.of(1, 2, 3);
+
+// Create a new aligner via one of the available static factory methods
 Aligner<String> aligner = Aligner.damerauLevenshtein();
 
 // Align source and target
 Alignment<String> alignment = aligner.align(source,target);
 
-// Inspect edits
-alignment.edits().forEach(System.out::println); // inspect edits
+// Get the cost and distance of the alignment
+double cost = alignment.cost();
+double distance = alignment.distance();
+System.out.printf("Cost: %s, distance: %s%n", cost, distance);
+
+// Inspect individual edits
+for (Edit<Integer> edit : alignment.edits()) {
+    Operation operation = edit.operation();
+    Segment<Integer> source = edit.source();
+    Segment<Integer> target = edit.target();
+    System.out.printf("Operation: %s, source: %s, target: %s%n", operation, source, target);
+}
 ```
 
-## Advanced - Custom Aligner
+You can also customise an Aligner with your own metrics:
 
 ```java
-// The source and target lists to be aligned.
-// An alignment will contain edits that describe how to transform source into target.
-List<Integer> source = List.of(1, 3, 3);
-List<Integer> target = List.of(1, 2, 3);
-
 // The equality operation is used to determine whether two elements are equal
 Equalizer<Integer> equalizer = Integer::equals;
+
 // The comparator is used to sort and compare two candidate lists for transposition
 Comparator<Integer> comparator = Integer::compareTo;
+
 // This cost function disables substitution for elements with values (3,2) by returning a Double.MAX_VALUE
 // when matched
 SubstituteCost<Integer> substituteCost = (s, t) -> s == 3 && t == 2 ? Double.MAX_VALUE : 1.0;
 
 // A custom damerau levenshtein aligner
 Aligner<Integer> aligner = Aligner.damerauLevenshtein(equalizer, comparator, substituteCost);
-
-// The expected list of edits
-List<Edit<Integer>> expected = List.of(
-        Edit.builder().equal(1).and(1).atPosition(0, 0),
-        Edit.builder().delete(3).atPosition(1, 1),
-        Edit.builder().insert(2).atPosition(2, 1),
-        Edit.builder().equal(3).and(3).atPosition(2, 2)
-);
-
-// Align the two lists
-Alignment<Integer> actual = aligner.align(source, target);
-
-// Assert expected results
-assertEquals(expected, actual.edits());
-assertEquals(2.0, actual.cost());
-assertEquals(2.0 / 3.0, actual.distance());
 ```
-
-## Performance
-
-Aligning two Integer lists of size 100 takes around 1200ms on my 3.5 GHz Dual-Core Intel Core i7 Macbook Pro. With
-levenshtein only (no traspositions) it takes around 70 ms.
-
-## More use cases
-
-Check out
-the [tests](https://github.com/manzurola/aligner/blob/67618def27d18e0e29e4f07905a4509907b379a3/src/test/java/io/squarebunny/aligner/AlignerTest.java)
-for more examples.
 
 ## Contributions
 
-[Contributions](https://github.com/manzurola/aligner/blob/a39d2719394fa258d3193e8258231950a3647920/CONTRIBUTING.md) are
-welcome.
+To contribute to Aligner, follow these steps:
+
+1. Fork this repository.
+2. Create a branch: git checkout -b <branch_name>.
+3. Make your changes and commit them: git commit -m '<commit_message>'
+4. Push to the original branch: git push origin <project_name>/<location>
+5. Create the pull request.
+
+Alternatively see the GitHub documentation on [creating a pull request](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request).
+
+        
+## Contributors
+        
+Thanks to the following people who have contributed to this project:
+        
+* [@manzurola](https://github.com/manzurola) 🐈        
+
+## Contact
+
+If you want to contact me you can reach me at [guy.manzurola@gmail.com](guy.manzurola@gmail.com).
+
+## License
+        
+This project uses the following license: [MIT](https://github.com/LanguageToys/aligner/blob/555fd35e842feb8d899d7197a1965ea01bc74c95/LICENSE)
