@@ -39,10 +39,10 @@ System.out.printf("Cost: %s, distance: %s%n", cost, distance);
 
 // Inspect individual edits
 for (Edit<Integer> edit : alignment.edits()) {
-    Operation operation = edit.operation();
-    Segment<Integer> source = edit.source();
-    Segment<Integer> target = edit.target();
-    System.out.printf("Operation: %s, source: %s, target: %s%n", operation, source, target);
+    Operation op = edit.operation();
+    Segment<Integer> s = edit.source();
+    Segment<Integer> t = edit.target();
+    System.out.printf("Operation: %s, source: %s, target: %s%n", op, s, t);
 }
 ```
 
