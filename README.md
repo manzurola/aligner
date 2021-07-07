@@ -9,7 +9,9 @@ and [diff_match_patch by Neil Fraser](https://github.com/google/diff-match-patch
 
 ## Prerequisits
 
-This library uses Java 11.
+Before you begin, ensure you have met the following requirements:
+
+* You have Java 11 installed.
 
 ## Installing Aligner
 
