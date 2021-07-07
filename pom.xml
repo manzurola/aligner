@@ -18,8 +18,8 @@
     <distributionManagement>
         <repository>
             <id>github</id>
-            <name>GitHub 'LanguageToys' Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/LanguageToys/aligner</url>
+            <name>GitHub 'languagetoys' Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/languagetoys/aligner</url>
         </repository>
     </distributionManagement>
 

@@ -14,16 +14,14 @@ public final class Alignment<T> {
 
     private final List<Edit<T>> edits;
     private final double cost;
-    private final double distance;
 
-    private Alignment(List<Edit<T>> edits, double cost, double distance) {
+    private Alignment(List<Edit<T>> edits, double cost) {
         this.edits = Objects.requireNonNull(edits);
         this.cost = cost;
-        this.distance = distance;
     }
 
-    public static <T> Alignment<T> of(List<Edit<T>> edits, double cost, double distance) {
-        return new Alignment<>(edits, cost, distance);
+    public static <T> Alignment<T> of(List<Edit<T>> edits, double cost) {
+        return new Alignment<>(edits, cost);
     }
 
     public final List<Edit<T>> edits() {
@@ -55,14 +53,14 @@ public final class Alignment<T> {
      * The normalized cost [0, 1]
      */
     public final double distance() {
-        return distance;
+        return cost() / Math.max(source().size(), target().size());
     }
 
     /**
      * The inverse of {@link #distance()}
      */
     public final double similarity() {
-        return 1 - distance;
+        return 1 - distance();
     }
 
     /**
@@ -97,13 +95,12 @@ public final class Alignment<T> {
         if (o == null || getClass() != o.getClass()) return false;
         Alignment<?> alignment = (Alignment<?>) o;
         return Double.compare(alignment.cost, cost) == 0 &&
-               Double.compare(alignment.distance, distance) == 0 &&
                edits.equals(alignment.edits);
     }
 
     @Override
     public final int hashCode() {
-        return Objects.hash(edits, cost, distance);
+        return Objects.hash(edits, cost);
     }
 
     @Override
@@ -111,7 +108,6 @@ public final class Alignment<T> {
         return "Alignment{" +
                "edits=" + edits +
                ", cost=" + cost +
-               ", distance=" + distance +
                '}';
     }
 

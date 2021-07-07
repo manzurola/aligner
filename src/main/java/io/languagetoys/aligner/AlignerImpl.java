@@ -120,8 +120,7 @@ final class AlignerImpl<T> implements Aligner<T> {
 
         List<Edit<T>> edits = backtrack(matrix, source, target);
         double cost = matrix[originalLength][correctedLength].cost;
-        double length = Math.max(source.size(), target.size());
-        return Alignment.of(edits, cost, cost / length);
+        return Alignment.of(edits, cost);
     }
 
     private Cell[][] initMatrix(int m, int n) {
