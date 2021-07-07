@@ -9,7 +9,9 @@ and [diff_match_patch by Neil Fraser](https://github.com/google/diff-match-patch
 
 ## Prerequisits
 
-This library uses Java 11.
+Before you begin, ensure you have met the following requirements:
+
+* You have Java 11 installed.
 
 ## Installing Aligner
 
@@ -68,9 +70,9 @@ Aligner<Integer> aligner = Aligner.damerauLevenshtein(equalizer, comparator, sub
 To contribute to Aligner, follow these steps:
 
 1. Fork this repository.
-2. Create a branch: git checkout -b <branch_name>.
-3. Make your changes and commit them: git commit -m '<commit_message>'
-4. Push to the original branch: git push origin <project_name>/<location>
+2. Create a branch: `git checkout -b <branch_name>`.
+3. Make your changes and commit them: `git commit -m '<commit_message>'`
+4. Push to the original branch: `git push origin <project_name>/<location>`
 5. Create the pull request.
 
 Alternatively see the GitHub documentation on [creating a pull request](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request).
@@ -88,4 +90,4 @@ If you want to contact me you can reach me at [guy.manzurola@gmail.com](guy.manz
 
 ## License
         
-This project uses the following license: [MIT](https://github.com/LanguageToys/aligner/blob/555fd35e842feb8d899d7197a1965ea01bc74c95/LICENSE)
+This project uses the following license: [MIT](https://github.com/LanguageToys/aligner/blob/555fd35e842feb8d899d7197a1965ea01bc74c95/LICENSE).
