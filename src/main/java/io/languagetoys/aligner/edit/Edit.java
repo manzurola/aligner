@@ -97,6 +97,19 @@ public abstract class Edit<T> implements Comparable<Edit<T>> {
         return Optional.of(this).filter(predicate);
     }
 
+    public final <R> Edit<R> project(List<R> source, List<R> target) {
+        return this.mapSegments(
+                s -> s.mapWithIndex(source::get),
+                t -> t.mapWithIndex(target::get)
+        );
+    }
+
+    public <R> EditShift<T, R> shift(Function<Edit<T>, R> initial) {
+        return new EditShift<>(this, initial);
+    }
+
+
+
     /**
      * Merges this edit with the supplied other, creating a new edit.
      * <p>
