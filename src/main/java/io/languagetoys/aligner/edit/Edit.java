@@ -98,6 +98,24 @@ public abstract class Edit<T> implements Comparable<Edit<T>> {
     }
 
     /**
+     * Create a new Edit R with the elements from source and target based on the index positions of the segments of this
+     * Edit. Equal to:
+     * <pre>
+     * {@code return this.mapSegments(
+     *                      s -> s.mapWithIndex(source::get),
+     *                      t -> t.mapWithIndex(target::get));
+     * }
+     * </pre>
+     *
+     */
+    public final <R> Edit<R> project(List<R> source, List<R> target) {
+        return this.mapSegments(
+                s -> s.mapWithPosition(source::get),
+                t -> t.mapWithPosition(target::get)
+        );
+    }
+
+    /**
      * Merges this edit with the supplied other, creating a new edit.
      * <p>
      * The edits must be adjacent for the merge to be successful.
