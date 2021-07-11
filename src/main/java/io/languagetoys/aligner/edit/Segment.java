@@ -80,7 +80,7 @@ public final class Segment<T> implements Comparable<Segment<T>> {
         );
     }
 
-    public final <E> Segment<E> mapWithIndex(Function<Integer, E> mapper) {
+    public final <E> Segment<E> mapWithPosition(Function<Integer, E> mapper) {
         List<E> collect = IntStream
                 .range(position, position + size())
                 .mapToObj(mapper::apply)
@@ -106,7 +106,7 @@ public final class Segment<T> implements Comparable<Segment<T>> {
      */
     @Deprecated
     public final <E> Segment<E> select(List<E> items) {
-        return mapWithIndex(items::get);
+        return mapWithPosition(items::get);
     }
 
     /**
