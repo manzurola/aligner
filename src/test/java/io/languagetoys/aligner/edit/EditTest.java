@@ -50,17 +50,18 @@ public class EditTest {
     @Test
     void testShift() {
 
-//        Edit<Integer> edit = Edit.builder()
-//                .substitute(2, 3)
-//                .with(5)
-//                .atPosition(1, 1);
-//
-//        String name = edit
-//                .shift(e -> "")
-//                .substitute(e -> "substitute")
-//                .delete(e -> "delete")
-//                .get();
-//
-//        Assertions.assertEquals("substitute", name);
+        Edit<Integer> edit = Edit.builder()
+                .substitute(2, 3)
+                .with(5)
+                .atPosition(1, 1);
+
+        String name = edit
+                .shift("")
+                .equal("equal")
+                .substitute(e -> "substitute")
+                .delete(e -> "delete")
+                .get();
+
+        Assertions.assertEquals("substitute", name);
     }
 }
