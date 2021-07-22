@@ -15,7 +15,7 @@ Before you begin, ensure you have met the following requirements:
 
 ## Installing Aligner
 
-Available as a Maven dependency via [GitHub Packages](https://github.com/orgs/LanguageToys/packages?repo_name=aligner).  
+Available as a Maven dependency via [GitHub Packages](https://github.com/manzurola?tab=packages&repo_name=aligner).  
 
 See GitHub documentation on [installing a package](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#installing-a-package).
 
@@ -90,4 +90,4 @@ If you want to contact me you can reach me at [guy.manzurola@gmail.com](guy.manz
 
 ## License
         
-This project uses the following license: [MIT](https://github.com/LanguageToys/aligner/blob/555fd35e842feb8d899d7197a1965ea01bc74c95/LICENSE).
+This project uses the following license: [MIT](https://github.com/manzurola/aligner/blob/main/LICENSE).
