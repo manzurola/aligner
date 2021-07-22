@@ -17,7 +17,7 @@
                 </repository>
                 <repository>
                     <id>github</id>
-                    <url>https://maven.pkg.github.com/languagetoys/*</url>
+                    <url>https://maven.pkg.github.com/manzurola/*</url>
                     <snapshots>
                         <enabled>true</enabled>
                     </snapshots>
@@ -29,8 +29,8 @@
     <servers>
         <server>
             <id>github</id>
-            <username>${env.USER_NAME}</username>
-            <password>${env.ACCESS_TOKEN}</password>
+            <username>${env.GH_USERNAME}</username>
+            <password>${env.GH_PAT}</password>
         </server>
     </servers>
 </settings>
