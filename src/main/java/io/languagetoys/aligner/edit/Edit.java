@@ -115,6 +115,10 @@ public abstract class Edit<T> implements Comparable<Edit<T>> {
         );
     }
 
+    public <R> EditShift<T, R> shift(R initial) {
+        return new EditShift<>(this, (e) -> initial);
+    }
+
     /**
      * Merges this edit with the supplied other, creating a new edit.
      * <p>

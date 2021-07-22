@@ -23,6 +23,11 @@ public class EditShift<T, R> {
         return this;
     }
 
+    public EditShift<T, R> equal(R value) {
+        this.visitor.onEqual(tEdit -> value);
+        return this;
+    }
+
     public EditShift<T, R> insert(Function<Edit<T>, R> visitor) {
         this.visitor.onInsert(visitor);
         return this;
