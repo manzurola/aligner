@@ -12,12 +12,18 @@ and [diff_match_patch by Neil Fraser](https://github.com/google/diff-match-patch
 Before you begin, ensure you have met the following requirements:
 
 * You have Java 11 installed.
+* You have access to Github Packages Maven registry as described [here](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#authenticating-to-github-packages)
 
 ## Installing Aligner
 
-Available as a Maven dependency via [GitHub Packages](https://github.com/manzurola?tab=packages&repo_name=aligner).  
-
-See GitHub documentation on [installing a package](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#installing-a-package).
+Add this to the dependencies section in your `pom.xml`:
+```xml
+<dependency>
+  <groupId>com.github.manzurola</groupId>
+  <artifactId>aligner</artifactId>
+  <version>0.3.0</version>
+</dependency>
+```
 
 ## Using Aligner
 
