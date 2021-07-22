@@ -5,7 +5,7 @@ Aligner computes a backtrace of the minimum edit distance using the [Damerau Lev
 Inspired by [Errant by Chris Bryant](https://github.com/chrisjbryant/errant/blob/master/errant/alignment.py)
 and [diff_match_patch by Neil Fraser](https://github.com/google/diff-match-patch).
 
-![maven](https://github.com/manzurola/aligner/actions/workflows/maven.yml/badge.svg)
+![maven](https://github.com/manzurola/aligner/actions/workflows/maven-build.yml/badge.svg)
 
 ## Prerequisits
 
