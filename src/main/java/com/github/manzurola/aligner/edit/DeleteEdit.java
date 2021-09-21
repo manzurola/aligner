@@ -22,6 +22,6 @@ public class DeleteEdit<T> extends Edit<T> {
 
     @Override
     public String toString() {
-        return String.format("Delete(%s) @%d:%d", source().tokens(), source().position(), target().position());
+        return String.format("Delete %s", source());
     }
 }

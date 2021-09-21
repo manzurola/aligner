@@ -1,6 +1,7 @@
 package com.github.manzurola.aligner.edit;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -147,9 +148,6 @@ public final class Segment<T> implements Comparable<Segment<T>> {
 
     @Override
     public final String toString() {
-        return "Segment{" +
-               "position=" + position +
-               ", tokens=" + tokens +
-               '}';
+        return tokens.toString();
     }
 }

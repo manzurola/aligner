@@ -22,6 +22,6 @@ public class InsertEdit<T> extends Edit<T> {
 
     @Override
     public String toString() {
-        return String.format("Insert(%s) @%d:%d", target().tokens(), source().position(), target().position());
+        return String.format("Insert %s", target());
     }
 }

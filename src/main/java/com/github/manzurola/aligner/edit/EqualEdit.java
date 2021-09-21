@@ -22,10 +22,6 @@ public class EqualEdit<T> extends Edit<T> {
 
     @Override
     public String toString() {
-        return String.format("Equal(%s,%s) @%d:%d",
-                             source().tokens(),
-                             target().tokens(),
-                             source().position(),
-                             target().position());
+        return String.format("Equal %s and %s", source(), target());
     }
 }
