@@ -1,11 +1,11 @@
 # Aligner 🤖
 
-Aligner computes a backtrace of the minimum edit distance using the [Damerau Levenshtein](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) algorithm.
+![maven](https://github.com/manzurola/aligner/actions/workflows/maven-build.yml/badge.svg)
+
+A Java library for aligning two generic lists using the [Damerau Levenshtein](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) algorithm.
 
 Inspired by [Errant by Chris Bryant](https://github.com/chrisjbryant/errant/blob/master/errant/alignment.py)
 and [diff_match_patch by Neil Fraser](https://github.com/google/diff-match-patch).
-
-![maven](https://github.com/manzurola/aligner/actions/workflows/maven-build.yml/badge.svg)
 
 ## Prerequisits
 
