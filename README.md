@@ -12,7 +12,6 @@ and [diff_match_patch by Neil Fraser](https://github.com/google/diff-match-patch
 Before you begin, ensure you have met the following requirements:
 
 * You have Java 11 installed.
-* You have access to Github Packages Maven registry as described [here](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#authenticating-to-github-packages).
 
 ## Installing Aligner
 
