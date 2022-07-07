@@ -18,7 +18,7 @@ Before you begin, ensure you have met the following requirements:
 Add this to the dependencies section in your `pom.xml`:
 ```xml
 <dependency>
-  <groupId>com.github.manzurola</groupId>
+  <groupId>io.github.manzurola</groupId>
   <artifactId>aligner</artifactId>
   <version>0.3.0</version>
 </dependency>
