@@ -9,8 +9,8 @@ import java.util.stream.Stream;
 
 /**
  * An edit represents the difference, or delta, between two lists of the generic argument
- * T. This difference is expressed by the operation of the edit, and two segments that hold the source and target
- * tokens. There are a total of 5 types of edits:
+ * T. This difference is expressed by the {@link Operation} of the edit, and two {@link Segment}s that hold the source and target
+ * tokens. There are a total of 5 types of edits, differentiated only by their Operation:
  * <ol>
  * <li>Delete - represents tokens that should be deleted from the source list. Should not have any target tokens.
  * <li>Insert - represents tokens that are missing from source. The missing tokens are referenced by the target segment.
