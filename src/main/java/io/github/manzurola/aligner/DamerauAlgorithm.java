@@ -54,13 +54,13 @@ final class DamerauAlgorithm<T> implements Algorithm<T> {
         T[] sourceArr = (T[]) source.toArray();
         T[] targetArr = (T[]) target.toArray();
 
-        int originalLength = sourceArr.length;
-        int correctedLength = targetArr.length;
+        int sourceLength = sourceArr.length;
+        int targetLength = targetArr.length;
 
-        Cell[][] matrix = initMatrix(originalLength, correctedLength);
+        Cell[][] matrix = initMatrix(sourceLength, targetLength);
 
-        for (int i = 0; i < originalLength; i++) {
-            for (int j = 0; j < correctedLength; j++) {
+        for (int i = 0; i < sourceLength; i++) {
+            for (int j = 0; j < targetLength; j++) {
 
                 T sourceToken = sourceArr[i];
                 T targetToken = targetArr[j];
@@ -156,7 +156,7 @@ final class DamerauAlgorithm<T> implements Algorithm<T> {
         }
 
         List<Edit<T>> edits = backtrack(matrix, source, target);
-        double cost = matrix[originalLength][correctedLength].cost;
+        double cost = matrix[sourceLength][targetLength].cost;
         return Alignment.of(edits, cost);
     }
 
@@ -294,15 +294,13 @@ final class DamerauAlgorithm<T> implements Algorithm<T> {
     ) {
 
         return Edit.of(
-            op,
-            Segment.of(
-                originalStart,
-                source.subList(originalStart, originalEnd)
-            ),
-            Segment.of(
-                correctedStart,
-                target.subList(correctedStart, correctedEnd)
-            )
+                Segment.of(
+                    originalStart,
+                    source.subList(originalStart, originalEnd)
+                ), Segment.of(
+                    correctedStart,
+                    target.subList(correctedStart, correctedEnd)
+                ), op
         );
     }
 

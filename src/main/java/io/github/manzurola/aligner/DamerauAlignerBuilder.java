@@ -4,7 +4,7 @@ import io.github.manzurola.aligner.metrics.*;
 
 import java.util.Comparator;
 
-final class DamerauAlignerBuilder<T> {
+public final class DamerauAlignerBuilder<T> {
 
     private Equalizer<T> equalizer = T::equals;
     private Comparator<T> comparator;

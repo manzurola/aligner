@@ -4,15 +4,15 @@ import java.util.function.Function;
 
 public interface EditVisitor<T, R> {
 
-    R visit(EqualEdit<T> edit);
+    R visitEqual(Edit<T> edit);
 
-    R visit(InsertEdit<T> edit);
+    R visitInsert(Edit<T> edit);
 
-    R visit(DeleteEdit<T> edit);
+    R visitDelete(Edit<T> edit);
 
-    R visit(SubstituteEdit<T> edit);
+    R visitSubstitute(Edit<T> edit);
 
-    R visit(TransposeEdit<T> edit);
+    R visitTranspose(Edit<T> edit);
 
     static <T, R> Builder<T, R> builder() {
         return new Builder<>();
@@ -78,27 +78,27 @@ public interface EditVisitor<T, R> {
             }
 
             @Override
-            public R visit(EqualEdit<T> edit) {
+            public R visitEqual(Edit<T> edit) {
                 return onEqual.apply(edit);
             }
 
             @Override
-            public R visit(InsertEdit<T> edit) {
+            public R visitInsert(Edit<T> edit) {
                 return onInsert.apply(edit);
             }
 
             @Override
-            public R visit(DeleteEdit<T> edit) {
+            public R visitDelete(Edit<T> edit) {
                 return onDelete.apply(edit);
             }
 
             @Override
-            public R visit(SubstituteEdit<T> edit) {
+            public R visitSubstitute(Edit<T> edit) {
                 return onSubstitute.apply(edit);
             }
 
             @Override
-            public R visit(TransposeEdit<T> edit) {
+            public R visitTranspose(Edit<T> edit) {
                 return onTranspose.apply(edit);
             }
         }

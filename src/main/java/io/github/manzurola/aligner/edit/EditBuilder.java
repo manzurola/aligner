@@ -50,20 +50,16 @@ public final class EditBuilder {
         return new Equal<>(tokens);
     }
 
-    public final <T> TypeResolvingBuilder<T> ofType(Operation operation) {
-        return new TypeResolvingBuilder<>(operation);
-    }
-
     public static final class Insert<T> extends AtPosition<T> {
         public Insert(List<T> target) {
-            super(List.of(), target, InsertEdit::new);
+            super(List.of(), target, Operation.INSERT);
         }
     }
 
     public static final class Delete<T> extends AtPosition<T> {
 
         public Delete(List<T> source) {
-            super(source, List.of(), DeleteEdit::new);
+            super(source, List.of(), Operation.DELETE);
         }
     }
 
@@ -81,7 +77,7 @@ public final class EditBuilder {
         }
 
         public final AtPosition<T> with(List<T> target) {
-            return new AtPosition<>(source, target, SubstituteEdit::new);
+            return new AtPosition<>(source, target, Operation.SUBSTITUTE);
         }
 
     }
@@ -100,7 +96,7 @@ public final class EditBuilder {
         }
 
         public final AtPosition<T> to(List<T> target) {
-            return new AtPosition<>(source, target, TransposeEdit::new);
+            return new AtPosition<>(source, target, Operation.TRANSPOSE);
         }
     }
 
@@ -118,7 +114,7 @@ public final class EditBuilder {
         }
 
         public final AtPosition<T> and(List<T> target) {
-            return new AtPosition<>(source, target, EqualEdit::new);
+            return new AtPosition<>(source, target, Operation.EQUAL);
         }
 
     }
@@ -127,53 +123,16 @@ public final class EditBuilder {
 
         private final List<T> source;
         private final List<T> target;
-        private final BiFunction<Segment<T>, Segment<T>, Edit<T>> creator;
+        private final Operation operation;
 
-        public AtPosition(List<T> source, List<T> target, BiFunction<Segment<T>, Segment<T>, Edit<T>> creator) {
+        public AtPosition(List<T> source, List<T> target, Operation operation) {
             this.source = source;
             this.target = target;
-            this.creator = creator;
-        }
-
-        public final Edit<T> atPosition(int source, int target) {
-            return creator.apply(Segment.of(source, this.source), Segment.of(target, this.target));
-        }
-    }
-
-    public static class TypeResolvingBuilder<T> {
-        private final Operation operation;
-        private Segment<T> source;
-        private Segment<T> target;
-
-        public TypeResolvingBuilder(Operation operation) {
             this.operation = operation;
         }
 
-        public TypeResolvingBuilder<T> source(Segment<T> source) {
-            this.source = source;
-            return this;
-        }
-
-        public TypeResolvingBuilder<T> target(Segment<T> target) {
-            this.target = target;
-            return this;
-        }
-
-        public Edit<T> build() {
-            switch (operation) {
-                case EQUAL:
-                    return new EqualEdit<>(source, target);
-                case SUBSTITUTE:
-                    return new SubstituteEdit<>(source, target);
-                case INSERT:
-                    return new InsertEdit<>(source, target);
-                case DELETE:
-                    return new DeleteEdit<>(source, target);
-                case TRANSPOSE:
-                    return new TransposeEdit<>(source, target);
-                default:
-                    throw new RuntimeException("Invalid edit operation");
-            }
+        public final Edit<T> atPosition(int source, int target) {
+            return Edit.of(Segment.of(source, this.source), Segment.of(target, this.target), operation);
         }
     }
 }

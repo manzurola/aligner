@@ -5,11 +5,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Base class for Edit objects. An edit represents the difference, or delta, between two lists of the generic argument
+ * An edit represents the difference, or delta, between two lists of the generic argument
  * T. This difference is expressed by the operation of the edit, and two segments that hold the source and target
  * tokens. There are a total of 5 types of edits:
  * <ol>
@@ -23,73 +22,85 @@ import java.util.stream.Stream;
  *
  * @param <T>
  */
-public abstract class Edit<T> implements Comparable<Edit<T>> {
+public final class Edit<T> implements Comparable<Edit<T>> {
 
     private final Segment<T> source;
     private final Segment<T> target;
+    private final Operation operation;
 
-    protected Edit(Segment<T> source,
-                   Segment<T> target) {
+    private Edit(Segment<T> source,
+                 Segment<T> target,
+                 Operation operation) {
         this.source = Objects.requireNonNull(source);
         this.target = Objects.requireNonNull(target);
+        this.operation = operation;
     }
 
     /**
      * Freely construct an Edit given the operation and segments.
      */
-    public static <T> Edit<T> of(Operation operation,
-                                 Segment<T> source,
-                                 Segment<T> target) {
-        return builder()
-                .<T>ofType(operation)
-                .source(source)
-                .target(target)
-                .build();
+    public static <T> Edit<T> of(Segment<T> source, Segment<T> target, Operation operation) {
+        return new Edit<>(source, target, operation);
     }
 
     public static EditBuilder builder() {
         return new EditBuilder();
     }
 
-    public abstract Operation operation();
+    public Operation operation() {
+        return operation;
+    }
 
-    public abstract <R> R accept(EditVisitor<T, R> visitor);
+    public <R> R accept(EditVisitor<T, R> visitor) {
+        switch (operation) {
+            case EQUAL:
+                return visitor.visitEqual(this);
+            case DELETE:
+                return visitor.visitDelete(this);
+            case INSERT:
+                return visitor.visitInsert(this);
+            case SUBSTITUTE:
+                return visitor.visitSubstitute(this);
+            case TRANSPOSE:
+                return visitor.visitTranspose(this);
+            default:
+                throw new IllegalStateException("Unknown operation");
+        }
+    }
 
-    public final Segment<T> source() {
+    public Segment<T> source() {
         return source;
     }
 
-    public final Segment<T> target() {
+    public Segment<T> target() {
         return target;
     }
 
-    public final Stream<T> stream() {
+    public Stream<T> stream() {
         return Stream.concat(source().stream(), target().stream());
     }
 
-    public final <E> Stream<E> streamSegments(Function<? super Segment<T>, ? extends E> s,
-                                              Function<? super Segment<T>, ? extends E> t) {
+    public <E> Stream<E> streamSegments(Function<? super Segment<T>, ? extends E> s,
+                                        Function<? super Segment<T>, ? extends E> t) {
         return Stream.concat(Stream.of(s.apply(source())), Stream.of(t.apply(target())));
     }
 
-    public final boolean matches(Predicate<? super Edit<T>> predicate) {
+    public boolean matches(Predicate<? super Edit<T>> predicate) {
         return predicate.test(this);
     }
 
-    public final <R> R transform(Function<? super Edit<T>, ? extends R> mapper) {
+    public <R> R transform(Function<? super Edit<T>, ? extends R> mapper) {
         return mapper.apply(this);
     }
 
     public <E> Edit<E> map(Function<? super T, ? extends E> mapper) {
-        return of(operation(), source().map(mapper), target().map(mapper));
+        return of(source().map(mapper), target().map(mapper), operation());
     }
 
     public <E> Edit<E> mapSegments(Function<Segment<T>, Segment<E>> sourceMapper,
                                    Function<Segment<T>, Segment<E>> targetMapper) {
         return of(
-                operation(),
-                sourceMapper.apply(source()),
-                targetMapper.apply(target())
+                sourceMapper.apply(source()), targetMapper.apply(target()), operation()
         );
     }
 
@@ -106,9 +117,8 @@ public abstract class Edit<T> implements Comparable<Edit<T>> {
      *                      t -> t.mapWithIndex(target::get));
      * }
      * </pre>
-     *
      */
-    public final <R> Edit<R> project(List<R> source, List<R> target) {
+    public <R> Edit<R> project(List<R> source, List<R> target) {
         return this.mapSegments(
                 s -> s.mapWithPosition(source::get),
                 t -> t.mapWithPosition(target::get)
@@ -135,59 +145,58 @@ public abstract class Edit<T> implements Comparable<Edit<T>> {
      * @param other
      * @return the merged edit
      */
-    public final Edit<T> mergeWith(Edit<T> other) {
-        Objects.requireNonNull(other);
-
-        if (equals(other)) {
-            return this;
-        }
-
-        List<Edit<T>> sorted = Stream.of(this, other)
-                .sorted()
-                .collect(Collectors.toList());
-        Edit<T> left = sorted.get(0);
-        Edit<T> right = sorted.get(1);
-
-        if (!left.isLeftSiblingOf(right)) {
-            throw new IllegalArgumentException("cannot merge edits");
-        }
-
-        Operation operation = mergeOperations(other.operation());
-        Segment<T> source = left.source.append(right.source.tokens());
-        Segment<T> target = left.target.append(right.target.tokens());
-
-        return Edit.of(operation, source, target);
-    }
+    @Deprecated
+//    public Edit<T> mergeWith(Edit<T> other) {
+//        Objects.requireNonNull(other);
+//
+//        if (equals(other)) {
+//            return this;
+//        }
+//
+//        List<Edit<T>> sorted = Stream.of(this, other)
+//                .sorted()
+//                .collect(Collectors.toList());
+//        Edit<T> left = sorted.get(0);
+//        Edit<T> right = sorted.get(1);
+//
+//        if (!left.isLeftSiblingOf(right)) {
+//            throw new IllegalArgumentException("cannot merge edits");
+//        }
+//
+//        Operation operation = mergeOperations(other.operation());
+//        Segment<T> source = left.source.append(right.source.tokens());
+//        Segment<T> target = left.target.append(right.target.tokens());
+//
+//        return Edit.of(operation, source, target);
+//    }
 
     /**
      * Does this edit precede {@code other} in the natural sort order and is also adjacent to it?
      */
-    public final boolean isLeftSiblingOf(Edit<T> other) {
+    public boolean isLeftSiblingOf(Edit<T> other) {
         Segment<T> leftSource = this.source;
         Segment<T> leftTarget = this.target;
         return leftSource.position() + leftSource.size() == other.source.position() &&
-               leftTarget.position() + leftTarget.size() == other.target.position();
+                leftTarget.position() + leftTarget.size() == other.target.position();
     }
 
-    protected abstract Operation mergeOperations(Operation other);
-
     @Override
-    public final int compareTo(Edit<T> o) {
+    public int compareTo(Edit<T> o) {
         return EditComparator.INSTANCE.compare(this, o);
     }
 
     @Override
-    public final boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Edit<?> that = (Edit<?>) o;
         return operation() == that.operation() &&
-               Objects.equals(source, that.source) &&
-               Objects.equals(target, that.target);
+                Objects.equals(source, that.source) &&
+                Objects.equals(target, that.target);
     }
 
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         return Objects.hash(operation(), source, target);
     }
 

@@ -1,7 +1,7 @@
 package io.github.manzurola.aligner;
 
 import io.github.manzurola.aligner.edit.Edit;
-import io.github.manzurola.aligner.edit.EqualEdit;
+import io.github.manzurola.aligner.edit.Operation;
 import io.github.manzurola.aligner.edit.Segment;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public final class Alignment<T> {
 
     public final List<Edit<T>> diffs() {
         return edits.stream()
-                .filter(e -> !(e instanceof EqualEdit))
+                .filter(e -> !e.operation().equals(Operation.EQUAL))
                 .collect(Collectors.toList());
     }
 
