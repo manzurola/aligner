@@ -24,73 +24,73 @@ public final class Alignment<T> {
         return new Alignment<>(edits, cost);
     }
 
-    public final List<Edit<T>> edits() {
+    public List<Edit<T>> edits() {
         return edits;
     }
 
-    public final List<Edit<T>> diffs() {
+    public List<Edit<T>> diffs() {
         return edits.stream()
                 .filter(e -> !e.operation().equals(Operation.EQUAL))
                 .collect(Collectors.toList());
     }
 
-    public final Stream<Edit<T>> stream() {
+    public Stream<Edit<T>> stream() {
         return edits().stream();
     }
 
-    public final void forEach(Consumer<Edit<T>> consumer) {
+    public void forEach(Consumer<Edit<T>> consumer) {
         edits.forEach(consumer);
     }
 
     /**
      * The total cost of operations
      */
-    public final double cost() {
+    public double cost() {
         return cost;
     }
 
     /**
      * The normalized cost [0, 1]
      */
-    public final double distance() {
+    public double distance() {
         return cost() / Math.max(source().size(), target().size());
     }
 
     /**
      * The inverse of {@link #distance()}
      */
-    public final double similarity() {
+    public double similarity() {
         return 1 - distance();
     }
 
     /**
      * The normalized cost ratio, defined as (maxLength - cost) / maxLength
      */
-    public final double ratio() {
+    public double ratio() {
         int lensum = Math.max(source().size(), target().size());
         return (lensum - cost()) / lensum;
     }
 
-    public final List<T> source() {
+    public List<T> source() {
         return edits.stream()
                 .map(Edit::source)
                 .flatMap(Segment::stream)
                 .collect(Collectors.toList());
     }
 
-    public final List<T> target() {
+    public List<T> target() {
         return edits.stream()
                 .map(Edit::target)
                 .flatMap(Segment::stream)
                 .collect(Collectors.toList());
     }
 
-    public final int size() {
+    public int size() {
         return edits.size();
     }
 
     @Override
-    public final boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Alignment<?> alignment = (Alignment<?>) o;
@@ -99,12 +99,12 @@ public final class Alignment<T> {
     }
 
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         return Objects.hash(edits, cost);
     }
 
     @Override
-    public final String toString() {
+    public String toString() {
         return "Alignment{" +
                "edits=" + edits +
                ", cost=" + cost +
