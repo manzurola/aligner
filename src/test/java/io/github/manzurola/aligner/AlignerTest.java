@@ -35,7 +35,11 @@ public class AlignerTest {
         SubstituteCost<Integer> substituteCost = (s, t) -> s == 3 && t == 2 ? Double.MAX_VALUE : 1.0;
 
         // A custom damerau levenshtein aligner
-        Aligner<Integer> aligner = Aligner.damerauLevenshtein(equalizer, comparator, substituteCost);
+        Aligner<Integer> aligner = Aligner.<Integer>builder()
+            .setEquals(equalizer)
+            .setCompareTo(comparator)
+            .setSubstituteCost(substituteCost)
+            .build();
 
         // Align the two lists
         Alignment<Integer> alignment = aligner.align(source, target);
@@ -57,7 +61,7 @@ public class AlignerTest {
 
     @Test
     void levenshteinSimple() {
-        Aligner<String> aligner = Aligner.levenshtein(String::equals);
+        Aligner<String> aligner = Aligner.levenshtein();
 
         List<String> source = List.of("guy", "is", "good");
         List<String> target = List.of("is", "good", "guy");
@@ -118,9 +122,9 @@ public class AlignerTest {
 
     @Test
     void alignerBuilder() {
-        Aligner.Builder<String> builder = Aligner.builder();
+        DamerauAlignerBuilder<String> builder = Aligner.builder();
         Aligner<String> aligner = builder
-                .setEqualizer(String::equals)
+                .setEquals(String::equals)
                 .setDeleteCost(source -> 5.0)
                 .build();
 
@@ -137,10 +141,10 @@ public class AlignerTest {
 
     @Test
     void withCustomComparator() {
-        Aligner<Element> aligner = Aligner.damerauLevenshtein(
-                Element::equals,
-                Comparator.comparing(element -> element.value.toLowerCase())
-        );
+        Aligner<Element> aligner = Aligner.<Element>builder()
+            .setEquals(Element::equals)
+            .setCompareTo(Comparator.comparing(element -> element.value.toLowerCase()))
+            .build();
 
         List<Element> source = List.of(new Element("a"), new Element("Guy"), new Element("IS"), new Element("GOOd"));
         List<Element> target = List.of(new Element("a"), new Element("is"), new Element("good"), new Element("guy"));
